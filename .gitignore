@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.gpkg
+!zonal_stats.gpkg
+dem_clip.*
