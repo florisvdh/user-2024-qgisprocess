@@ -1,0 +1,496 @@
+---
+title: "Interfacing QGIS processing from R"
+subtitle: ""
+author: "Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace"
+institute: 
+date: "2023-06-30"
+output:
+  xaringan::moon_reader:
+    lib_dir: docs/libs
+    css: 
+      - rladies
+      - rladies-fonts
+      - "css/animate.min.css"
+    chakra: libs/remark-latest.min.js
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(dplyr)
+library(stringr)
+library(units)
+```
+
+<style type="text/css">
+.remark-code-line-highlighted {
+	background-color: #ff80;
+	font-weight: bold;
+}
+</style>
+
+
+
+# About R
+
+- free and open-source, cross-platform
+
+--
+
+- easy-to-learn interactive programming language for people that have data-oriented problems
+
+--
+
+- provides facilities for data manipulation, calculation and graphical display
+
+--
+
+- much built-in functionality for statisticians; has strong ties to scientific research
+
+--
+
+- has a vast package ecosystem that extends R
+
+--
+
+```{r}
+# HOW MANY PACKAGES ARE AVAILABLE AT CRAN? (Comprehensive R Archive Network)
+
+available.packages() |> nrow()
+```
+
+--
+
+- many packages were developed to represent, analyze or visualize geospatial data
+
+  - very popular packages are **sf** and **terra**
+
+---
+layout: true
+class: animated, bounceInLeft
+
+# Interfacing QGIS from R
+
+---
+
+- formerly: packages **RQGIS** and  **RQGIS3** (Muenchow & Schratz) for QGIS 2 and 3
+
+--
+
+  - use the QGIS Python API
+
+--
+
+  - set QGIS environment variables
+  
+--
+
+  - with **RQGIS3**, crashes were observed in RStudio
+  
+--
+
+  - no longer developed
+  
+--
+
+- since QGIS 3.16: packages **qgisprocess** & **qgis**
+
+--
+
+  - use the recent `qgis_process` shell command
+
+--
+
+  - no more QGIS environment variables needed
+  
+--
+
+  - currently developed
+
+---
+
+```
+$ qgis_process
+QGIS Processing Executor - 3.30.3-'s-Hertogenbosch ''s-Hertogenbosch' (3.30.3-'s-Hertogenbosch)
+Usage: /usr/bin/qgis_process.bin [--help] [--version] [--json] [--verbose] [--no-python] 
+[command] [algorithm id, path to model file, or path to Python script] [parameters]
+
+...
+```
+
+`qgis_process run <algorithm> [parameters]`
+
+`qgis_process run <algorithm> -`
+
+`qgis_process plugins`
+
+---
+layout: false
+
+# Current R-packages
+
+- **qgisprocess** (Dewey Dunnington et al.): direct interface to `qgis_process` shell command
+  - https://r-spatial.github.io/qgisprocess/
+- **qgis** (Jan Caha): functions for each algorithm; uses **qgisprocess** package
+  - https://jancaha.github.io/r_package_qgis/
+
+---
+layout: true
+
+# Basic usage
+
+---
+
+```{r echo=FALSE, message=FALSE}
+library(tmap)
+tm_shape(sf::st_as_sf(spData::seine)) + 
+  tm_lines() + 
+  tm_style("beaver") + 
+  tm_compass(type = "arrow", position = c("right", "top")) + 
+  tm_scale_bar(position = "left") +
+  tm_layout(
+    "'seine' dataset from spData package", 
+    title.position = c("center", "top"), 
+    title.fontfamily = "sans"
+    )
+seine_path <- file.path("data/seine.gpkg")
+sf::write_sf(spData::seine, seine_path)
+```
+
+---
+
+Load R package.
+
+```{r}
+library(qgisprocess)
+```
+
+```{r}
+seine_path <- file.path("data/seine.gpkg")
+```
+
+```{r}
+(seine <- sf::read_sf(seine_path))
+```
+
+
+---
+
+Run algorithm.
+
+```{r}
+result <- qgis_run_algorithm(
+  algorithm = "native:pointsalonglines",
+  INPUT = seine_path,
+  DISTANCE = 1e4
+)
+```
+
+--
+
+ or:
+ 
+```{r eval=FALSE}
+result <- qgis::qgis_pointsalonglines(
+  INPUT = seine_path,
+  DISTANCE = 1e4
+)
+```
+ 
+---
+
+Extract output (defaults to the `"OUTPUT"` element of `result`).
+
+```{r}
+qgis_extract_output(result)
+```
+
+---
+
+```{r echo=FALSE}
+tm_shape(sf::st_as_sf(spData::seine)) + 
+  tm_style("beaver") +
+  tm_lines() + 
+  tm_shape(sf::st_as_sf(result)) +
+  tm_dots(col = "blue", size = 0.1) +
+  tm_compass(type = "arrow", position = c("right", "top")) + 
+  tm_scale_bar(position = "left")
+```
+
+---
+layout: true
+
+# Finding algorithms
+
+---
+
+```{r}
+qgis_algorithms() |>
+  select(provider, algorithm, algorithm_title) |> 
+  filter(str_detect(algorithm, "point.*line")) |> 
+  knitr::kable()
+```
+
+---
+
+```{r}
+qgis_providers()
+```
+
+---
+
+```{r}
+qgis_plugins()
+```
+
+---
+layout:false
+
+# Algorithm documentation
+
+
+```{r}
+qgis_show_help("native:pointsalonglines")
+```
+
+---
+layout: true
+
+# Supports various R objects as input arguments
+
+---
+
+- spatial QGIS argument types
+  - vector argument types: accept **sf** or **terra** objects
+  - raster argument types: accept **stars**, **terra** and **raster** objects
+  - multilayer: accepts a list (preferrably wrapped as `qgis_list_input()`)
+  - extent: accepts various 'bounding box' and 'extent' objects
+  - crs: accepts various CRS objects
+
+--
+
+- non-spatial QGIS argument types:
+  - expression: accepts a string
+  - enum: accepts the integer or character representation
+  - range: accepts a vector
+  - matrix: accepts a matrix or dataframe
+  - color: accepts an R color string representation
+  - hierarchical arguments such as `aggregates`: accept a nested list
+  - ...
+
+---
+
+```{r message=FALSE}
+library(terra)
+elev <- rast(system.file("ex/elev.tif", package = "terra"))
+class(elev)
+qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
+```
+
+
+---
+layout: true
+
+# Result handling
+
+---
+
+## Extracting elements from the result
+
+By default, the `OUTPUT` element is selected by `qgis_extract_output()`.
+
+- typically contains a file path.
+
+Which output elements are generated by an algorithm?
+
+```{r}
+qgis_get_output_specs("grass7:r.flow")
+```
+
+So, sometimes you need to select a specific output:
+
+```{r eval=FALSE}
+qgis_extract_output(result, "flowline")
+```
+
+---
+
+## Coercing output to R objects
+
+Result object or output element can be coerced to an R object:
+
+```{r eval=FALSE}
+sf::st_as_sf(result) # takes OUTPUT by default
+result |> qgis_extract_output("flowline") |> sf::st_as_sf()
+```
+
+
+```{r eval=FALSE}
+qgis_as_terra(result)
+```
+
+
+```{r eval=FALSE}
+qgis_as_raster(result)
+```
+
+
+```{r eval=FALSE}
+stars::st_as_stars(result)
+```
+
+---
+layout:false
+
+# Algorithm piping
+
+```{r message=FALSE}
+seine_points_buffer <- seine |> 
+  qgis_run_algorithm_p("native:pointsalonglines", DISTANCE = 1e4) |> 
+  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000, OUTPUT = "data/buffer.gpkg")
+seine_points_buffer
+```
+
+--
+
+Alternative with **qgis** package:
+ 
+```{r}
+seine |> 
+  qgis::qgis_pointsalonglines(DISTANCE = 1e4) |> 
+  qgis_extract_output() |> 
+  qgis::qgis_buffer(DISTANCE = 1000)
+```
+
+---
+layout:true
+
+# Taking parameters from the QGIS GUI
+
+---
+
+```{r echo=FALSE, out.width='800px'}
+knitr::include_graphics("images/qgis_copy_json.png", error = FALSE)
+```
+
+---
+
+```{r include=FALSE}
+json_from_qgis <- readLines("zonal_stats.json") |> paste(collapse = "")
+```
+
+```{r}
+jsonlite::prettify(json_from_qgis)
+```
+
+---
+
+```{r eval=FALSE}
+buffer_stats_path <- qgis_run_algorithm(
+  "native:zonalstatisticsfb", 
+  .raw_json_input = json_from_qgis   #<<
+)
+```
+
+```{r include=FALSE}
+# the native:zonalstatisticsfb algorithm was run on a tif file of approx 140 MB,
+# not included in the repo. The resulting gpkg therefore is included.
+buffer_stats_path <- readRDS("data/buffer_stats_path.rds")
+```
+
+
+```{r}
+buffer_stats_path
+```
+
+
+---
+layout:false
+
+# Further processing in R
+
+```{r}
+buffer_stats <- sf::st_as_sf(buffer_stats_path) |> 
+  sf::st_drop_geometry() |> 
+  mutate(distance = set_units(distance, "m") |> set_units("km"))
+buffer_stats
+```
+
+---
+
+```{r include=FALSE}
+plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampled points"
+```
+
+
+```{r fig.height=6, fig.width=8}
+library(ggplot2)
+ggplot(data = buffer_stats, 
+       aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
+  geom_line() +
+  geom_ribbon(fill = "purple", alpha = 0.3) +
+  facet_wrap(~name, scales = "free_x") +
+  labs(y = "elevation [m]", title = plottitle)
+```
+
+---
+
+# Cheat sheet !
+
+---
+
+# <https://r-spatial.github.io/qgisprocess>
+
+```{r echo=FALSE}
+knitr::include_url("https://r-spatial.github.io/qgisprocess/reference/index.html", "460px")
+```
+
+---
+
+# <https://jancaha.github.io/r_package_qgis>
+
+```{r echo=FALSE}
+knitr::include_url("https://jancaha.github.io/r_package_qgis/reference/index.html", "460px")
+```
+
+---
+
+# Main advantages of interfacing QGIS from R
+
+--
+
+- Expanding geospatial processing abilities compared to functionality in other R packages.
+
+--
+
+- Fully reproducible R scripting outside of QGIS; no need for a QGIS project.
+
+--
+
+- Providing a unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers.
+
+---
+
+# Future developments
+
+- Include more tutorials
+  - options & environment variables
+  - accepted R object types
+  - copy JSON from QGIS)
+  
+- Expand function documentation
+
+- Adapt to `qgis_process` development
+
+
+---
+class: inverse, center, middle
+
+# Questions?
+
+
+
+

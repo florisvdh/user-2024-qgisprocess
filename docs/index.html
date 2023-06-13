@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Interfacing QGIS processing from R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace" />
+    <meta name="date" content="2023-06-30" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Interfacing QGIS processing from R
+]
+.author[
+### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace
+]
+.date[
+### 2023-06-30
+]
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-code-line-highlighted {
+	background-color: #ff80;
+	font-weight: bold;
+}
+&lt;/style&gt;
+
+
+
+# About R
+
+- free and open-source, cross-platform
+
+--
+
+- easy-to-learn interactive programming language for people that have data-oriented problems
+
+--
+
+- provides facilities for data manipulation, calculation and graphical display
+
+--
+
+- much built-in functionality for statisticians; has strong ties to scientific research
+
+--
+
+- has a vast package ecosystem that extends R
+
+--
+
+
+```r
+# HOW MANY PACKAGES ARE AVAILABLE AT CRAN? (Comprehensive R Archive Network)
+
+available.packages() |&gt; nrow()
+```
+
+```
+## [1] 19687
+```
+
+--
+
+- many packages were developed to represent, analyze or visualize geospatial data
+
+  - very popular packages are **sf** and **terra**
+
+---
+layout: true
+class: animated, bounceInLeft
+
+# Interfacing QGIS from R
+
+---
+
+- formerly: packages **RQGIS** and  **RQGIS3** (Muenchow &amp; Schratz) for QGIS 2 and 3
+
+--
+
+  - use the QGIS Python API
+
+--
+
+  - set QGIS environment variables
+  
+--
+
+  - with **RQGIS3**, crashes were observed in RStudio
+  
+--
+
+  - no longer developed
+  
+--
+
+- since QGIS 3.16: packages **qgisprocess** &amp; **qgis**
+
+--
+
+  - use the recent `qgis_process` shell command
+
+--
+
+  - no more QGIS environment variables needed
+  
+--
+
+  - currently developed
+
+---
+
+```
+$ qgis_process
+QGIS Processing Executor - 3.30.3-'s-Hertogenbosch ''s-Hertogenbosch' (3.30.3-'s-Hertogenbosch)
+Usage: /usr/bin/qgis_process.bin [--help] [--version] [--json] [--verbose] [--no-python] 
+[command] [algorithm id, path to model file, or path to Python script] [parameters]
+
+...
+```
+
+`qgis_process run &lt;algorithm&gt; [parameters]`
+
+`qgis_process run &lt;algorithm&gt; -`
+
+`qgis_process plugins`
+
+---
+layout: false
+
+# Current R-packages
+
+- **qgisprocess** (Dewey Dunnington et al.): direct interface to `qgis_process` shell command
+  - https://r-spatial.github.io/qgisprocess/
+- **qgis** (Jan Caha): functions for each algorithm; uses **qgisprocess** package
+  - https://jancaha.github.io/r_package_qgis/
+
+---
+layout: true
+
+# Basic usage
+
+---
+
+![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+Load R package.
+
+
+```r
+library(qgisprocess)
+```
+
+```
+## Attempting to load the cache ... Success!
+## QGIS version: 3.30.3-'s-Hertogenbosch
+## Having access to 1848 algorithms from 12 QGIS processing providers.
+## Run `qgis_configure(use_cached_data = TRUE)` to reload cache and get more details.
+```
+
+
+```r
+seine_path &lt;- file.path("data/seine.gpkg")
+```
+
+
+```r
+(seine &lt;- sf::read_sf(seine_path))
+```
+
+```
+## Simple feature collection with 3 features and 1 field
+## Geometry type: MULTILINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: 518344.7 ymin: 6660431 xmax: 879955.3 ymax: 6938864
+## Projected CRS: RGF93 v1 / Lambert-93
+## # A tibble: 3 × 2
+##   name                                                                      geom
+##   &lt;chr&gt;                                                    &lt;MULTILINESTRING [m]&gt;
+## 1 Marne ((879955.3 6755725, 878440.9 6755688, 876653.8 6756227, 874212.2 675791…
+## 2 Seine ((828893.6 6713873, 828216.3 6715450, 827937.9 6716999, 828199.2 671851…
+## 3 Yonne ((773482.1 6660431, 771342.9 6665712, 771043 6667566, 770931.7 6669151,…
+```
+
+
+---
+
+Run algorithm.
+
+
+```r
+result &lt;- qgis_run_algorithm(
+  algorithm = "native:pointsalonglines",
+  INPUT = seine_path,
+  DISTANCE = 1e4
+)
+```
+
+```
+## Argument `START_OFFSET` is unspecified (using QGIS default value).
+```
+
+```
+## Argument `END_OFFSET` is unspecified (using QGIS default value).
+```
+
+```
+## Using `OUTPUT = qgis_tmp_vector()`
+```
+
+--
+
+ or:
+ 
+
+```r
+result &lt;- qgis::qgis_pointsalonglines(
+  INPUT = seine_path,
+  DISTANCE = 1e4
+)
+```
+ 
+---
+
+Extract output (defaults to the `"OUTPUT"` element of `result`).
+
+
+```r
+qgis_extract_output(result)
+```
+
+```
+## [1] "/tmp/Rtmp7DwbP8/fileba9a686673df/fileba9a76d2adeb.gpkg"
+## attr(,"class")
+## [1] "qgis_outputVector"
+```
+
+---
+
+![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+layout: true
+
+# Finding algorithms
+
+---
+
+
+```r
+qgis_algorithms() |&gt;
+  select(provider, algorithm, algorithm_title) |&gt; 
+  filter(str_detect(algorithm, "point.*line")) |&gt; 
+  knitr::kable()
+```
+
+
+
+|provider |algorithm                                  |algorithm_title                              |
+|:--------|:------------------------------------------|:--------------------------------------------|
+|gdal     |gdal:pointsalonglines                      |Points along lines                           |
+|native   |native:pointsalonglines                    |Points along geometry                        |
+|native   |native:randompointsonlines                 |Random points on lines                       |
+|qgis     |qgis:generatepointspixelcentroidsalongline |Generate points (pixel centroids) along line |
+|qgis     |qgis:randompointsalongline                 |Random points along line                     |
+|sagang   |sagang:convertpointstolines                |Convert points to line(s)                    |
+|sagang   |sagang:pointtolinedistances                |Point to line distances                      |
+|sagang   |sagang:snappointstolines                   |Snap points to lines                         |
+
+---
+
+
+```r
+qgis_providers()
+```
+
+```
+## # A tibble: 12 × 3
+##    provider         provider_title                         algorithm_count
+##    &lt;chr&gt;            &lt;chr&gt;                                            &lt;int&gt;
+##  1 cartographytools Cartography tools                                    5
+##  2 gdal             GDAL                                                56
+##  3 grass7           GRASS                                              304
+##  4 latlontools      Lat Lon tools                                        8
+##  5 otb              OTB                                                109
+##  6 qgis             QGIS                                                50
+##  7 3d               QGIS (3D)                                            1
+##  8 native           QGIS (native c++)                                  242
+##  9 qneat3           QNEAT3 - Qgis Network Analysis Toolbox              14
+## 10 sagang           SAGA Next Gen                                      509
+## 11 visibility       Visibility analysis                                  4
+## 12 wbt              WhiteboxTools                                      546
+```
+
+---
+
+
+```r
+qgis_plugins()
+```
+
+```
+## # A tibble: 9 × 2
+##   name                    enabled
+##   &lt;chr&gt;                   &lt;lgl&gt;  
+## 1 QNEAT3                  TRUE   
+## 2 ViewshedAnalysis        TRUE   
+## 3 cartography_tools       TRUE   
+## 4 grassprovider           TRUE   
+## 5 latlontools             TRUE   
+## 6 otbprovider             TRUE   
+## 7 processing              TRUE   
+## 8 processing_saga_nextgen TRUE   
+## 9 wbt_for_qgis            TRUE
+```
+
+---
+layout:false
+
+# Algorithm documentation
+
+
+
+```r
+qgis_show_help("native:pointsalonglines")
+```
+
+```
+## Points along geometry (native:pointsalonglines)
+## 
+## ----------------
+## Description
+## ----------------
+## Creates regularly spaced points along line features.
+## This algorithm creates a points layer, with points distributed along the lines of an input vector layer. The distance between points (measured along the line) is defined as a parameter.
+## 
+## Start and end offset distances can be defined, so the first and last point will not fall exactly on the line's first and last nodes. These start and end offsets are defined as distances, measured along the line from the first and last nodes of the lines.
+## 
+## ----------------
+## Arguments
+## ----------------
+## 
+## INPUT: Input layer
+## 	Argument type:	source
+## 	Acceptable values:
+## 		- Path to a vector layer
+## DISTANCE: Distance
+## 	Default value:	1
+## 	Argument type:	distance
+## 	Acceptable values:
+## 		- A numeric value
+## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
+## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
+## START_OFFSET: Start offset
+## 	Default value:	0
+## 	Argument type:	distance
+## 	Acceptable values:
+## 		- A numeric value
+## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
+## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
+## END_OFFSET: End offset
+## 	Default value:	0
+## 	Argument type:	distance
+## 	Acceptable values:
+## 		- A numeric value
+## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
+## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
+## OUTPUT: Interpolated points
+## 	Argument type:	sink
+## 	Acceptable values:
+## 		- Path for new vector layer
+## 
+## ----------------
+## Outputs
+## ----------------
+## 
+## OUTPUT: &lt;outputVector&gt;
+## 	Interpolated points
+```
+
+---
+layout: true
+
+# Supports various R objects as input arguments
+
+---
+
+- spatial QGIS argument types
+  - vector argument types: accept **sf** or **terra** objects
+  - raster argument types: accept **stars**, **terra** and **raster** objects
+  - multilayer: accepts a list (preferrably wrapped as `qgis_list_input()`)
+  - extent: accepts various 'bounding box' and 'extent' objects
+  - crs: accepts various CRS objects
+
+--
+
+- non-spatial QGIS argument types:
+  - expression: accepts a string
+  - enum: accepts the integer or character representation
+  - range: accepts a vector
+  - matrix: accepts a matrix or dataframe
+  - color: accepts an R color string representation
+  - hierarchical arguments such as `aggregates`: accept a nested list
+  - ...
+
+---
+
+
+```r
+library(terra)
+elev &lt;- rast(system.file("ex/elev.tif", package = "terra"))
+class(elev)
+```
+
+```
+## [1] "SpatRaster"
+## attr(,"package")
+## [1] "terra"
+```
+
+```r
+qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
+```
+
+```
+## &lt;Result of `qgis_run_algorithm("native:rasterlayerstatistics", ...)`&gt;
+## List of 8
+##  $ MAX             : num 547
+##  $ MEAN            : num 348
+##  $ MIN             : num 141
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/Rtmp7DwbP8/fileba9a686673df/fileba9a2b258914"
+##  $ RANGE           : num 406
+##  $ STD_DEV         : num 80.2
+##  $ SUM             : num 1605135
+##  $ SUM_OF_SQUARES  : num 29646349
+```
+
+
+---
+layout: true
+
+# Result handling
+
+---
+
+## Extracting elements from the result
+
+By default, the `OUTPUT` element is selected by `qgis_extract_output()`.
+
+- typically contains a file path.
+
+Which output elements are generated by an algorithm?
+
+
+```r
+qgis_get_output_specs("grass7:r.flow")
+```
+
+```
+## # A tibble: 3 × 3
+##   name             description       qgis_output_type
+##   &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;           
+## 1 flowaccumulation Flow accumulation outputRaster    
+## 2 flowlength       Flow path length  outputRaster    
+## 3 flowline         Flow line         outputVector
+```
+
+So, sometimes you need to select a specific output:
+
+
+```r
+qgis_extract_output(result, "flowline")
+```
+
+---
+
+## Coercing output to R objects
+
+Result object or output element can be coerced to an R object:
+
+
+```r
+sf::st_as_sf(result) # takes OUTPUT by default
+result |&gt; qgis_extract_output("flowline") |&gt; sf::st_as_sf()
+```
+
+
+
+```r
+qgis_as_terra(result)
+```
+
+
+
+```r
+qgis_as_raster(result)
+```
+
+
+
+```r
+stars::st_as_stars(result)
+```
+
+---
+layout:false
+
+# Algorithm piping
+
+
+```r
+seine_points_buffer &lt;- seine |&gt; 
+  qgis_run_algorithm_p("native:pointsalonglines", DISTANCE = 1e4) |&gt; 
+  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000, OUTPUT = "data/buffer.gpkg")
+seine_points_buffer
+```
+
+```
+## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
+## List of 1
+##  $ OUTPUT: 'qgis_outputVector' chr "data/buffer.gpkg"
+```
+
+--
+
+Alternative with **qgis** package:
+ 
+
+```r
+seine |&gt; 
+  qgis::qgis_pointsalonglines(DISTANCE = 1e4) |&gt; 
+  qgis_extract_output() |&gt; 
+  qgis::qgis_buffer(DISTANCE = 1000)
+```
+
+```
+## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
+## List of 1
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/Rtmp7DwbP8/fileba9a686673df/fileba9a49bb28db.gpkg"
+```
+
+---
+layout:true
+
+# Taking parameters from the QGIS GUI
+
+---
+
+&lt;img src="images/qgis_copy_json.png" width="800px" /&gt;
+
+---
+
+
+
+
+```r
+jsonlite::prettify(json_from_qgis)
+```
+
+```
+## {
+##     "area_units": "m2",
+##     "distance_units": "meters",
+##     "ellipsoid": "EPSG:7030",
+##     "inputs": {
+##         "COLUMN_PREFIX": "dem_",
+##         "INPUT": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/buffer.gpkg|layername=buffer",
+##         "INPUT_RASTER": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/dem_clip.tif",
+##         "OUTPUT": "ogr:dbname='/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg' table=\"seine_zonal\" (geom)",
+##         "RASTER_BAND": 1,
+##         "STATISTICS": [
+##             2,
+##             3,
+##             4,
+##             5,
+##             6
+##         ]
+##     }
+## }
+## 
+```
+
+---
+
+
+```r
+buffer_stats_path &lt;- qgis_run_algorithm(
+  "native:zonalstatisticsfb", 
+* .raw_json_input = json_from_qgis
+)
+```
+
+
+
+
+
+```r
+buffer_stats_path
+```
+
+```
+## &lt;Result of `qgis_run_algorithm("native:zonalstatisticsfb", ...)`&gt;
+## List of 1
+##  $ OUTPUT: 'qgis_outputVector' chr "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg|layername=seine_zonal"
+```
+
+
+---
+layout:false
+
+# Further processing in R
+
+
+```r
+buffer_stats &lt;- sf::st_as_sf(buffer_stats_path) |&gt; 
+  sf::st_drop_geometry() |&gt; 
+  mutate(distance = set_units(distance, "m") |&gt; set_units("km"))
+buffer_stats
+```
+
+```
+## # A tibble: 123 × 8
+##    name  distance  angle dem_mean dem_median dem_stdev dem_min dem_max
+##    &lt;chr&gt;     [km]  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Marne        0 269.       372.       366.      22.0    344.    412.
+##  2 Marne       10 322.       340.       338       21.9    309.    416.
+##  3 Marne       20 327.       331.       334.      23.9    287.    382.
+##  4 Marne       30 332.       296.       280.      29.5    264.    359.
+##  5 Marne       40   5.76     286.       295.      24.3    238.    317.
+##  6 Marne       50 358.       269.       254.      45.4    221.    378.
+##  7 Marne       60  22.4      235.       220.      32.7    201.    312.
+##  8 Marne       70 350.       202.       188.      24.8    183.    306.
+##  9 Marne       80 335.       196.       184.      26.9    167.    276 
+## 10 Marne       90 334.       182.       184.      19.6    150.    209.
+## # ℹ 113 more rows
+```
+
+---
+
+
+
+
+
+```r
+library(ggplot2)
+ggplot(data = buffer_stats, 
+       aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
+  geom_line() +
+  geom_ribbon(fill = "purple", alpha = 0.3) +
+  facet_wrap(~name, scales = "free_x") +
+  labs(y = "elevation [m]", title = plottitle)
+```
+
+![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+---
+
+# Cheat sheet !
+
+---
+
+# &lt;https://r-spatial.github.io/qgisprocess&gt;
+
+&lt;iframe src="https://r-spatial.github.io/qgisprocess/reference/index.html" width="100%" height="460px" data-external="1"&gt;&lt;/iframe&gt;
+
+---
+
+# &lt;https://jancaha.github.io/r_package_qgis&gt;
+
+&lt;iframe src="https://jancaha.github.io/r_package_qgis/reference/index.html" width="100%" height="460px" data-external="1"&gt;&lt;/iframe&gt;
+
+---
+
+# Main advantages of interfacing QGIS from R
+
+--
+
+- Expanding geospatial processing abilities compared to functionality in other R packages.
+
+--
+
+- Fully reproducible R scripting outside of QGIS; no need for a QGIS project.
+
+--
+
+- Providing a unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers.
+
+---
+
+# Future developments
+
+- Include more tutorials
+  - options &amp; environment variables
+  - accepted R object types
+  - copy JSON from QGIS)
+  
+- Expand function documentation
+
+- Adapt to `qgis_process` development
+
+
+---
+class: inverse, center, middle
+
+# Questions?
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

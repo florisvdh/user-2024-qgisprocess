@@ -1,0 +1,19 @@
+{
+  "area_units": "m2",
+  "distance_units": "meters",
+  "ellipsoid": "EPSG:7030",
+  "inputs": {
+    "COLUMN_PREFIX": "dem_",
+    "INPUT": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/buffer.gpkg|layername=buffer",
+    "INPUT_RASTER": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/dem_clip.tif",
+    "OUTPUT": "ogr:dbname='/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg' table=\"seine_zonal\" (geom)",
+    "RASTER_BAND": 1,
+    "STATISTICS": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  }
+}
