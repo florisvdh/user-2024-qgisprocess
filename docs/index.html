@@ -153,7 +153,7 @@ layout: true
 
 ---
 
-![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](index_files/figure-html/seine-map-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -243,14 +243,14 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/RtmpuzHLSS/file55cb23277ff3/file55cb2c1b4cec.gpkg"
+## [1] "/tmp/RtmpTXgpyg/file1d6b33af9408/file1d6b2a11e611.gpkg"
 ## attr(,"class")
 ## [1] "qgis_outputVector"
 ```
 
 ---
 
-![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](index_files/figure-html/seine-points-map-1.png)&lt;!-- --&gt;
 
 ---
 layout: true
@@ -441,7 +441,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ##  $ MAX             : num 547
 ##  $ MEAN            : num 348
 ##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpuzHLSS/file55cb23277ff3/file55cb343de968"
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpTXgpyg/file1d6b33af9408/file1d6b5ae71a85"
 ##  $ RANGE           : num 406
 ##  $ STD_DEV         : num 80.2
 ##  $ SUM             : num 1605135
@@ -552,7 +552,7 @@ seine |&gt;
 ```
 ## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 ## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpuzHLSS/file55cb23277ff3/file55cb2e9f500c.gpkg"
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpTXgpyg/file1d6b33af9408/file1d6b50bf81f7.gpkg"
 ```
 
 ---
@@ -667,7 +667,7 @@ ggplot(data = buffer_stats,
   labs(y = "elevation [m]", title = plottitle)
 ```
 
-![](/media/floris/DATA/git_repositories/foss4g-2023-qgisprocess/docs/index_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](index_files/figure-html/dem-plot-1.png)&lt;!-- --&gt;
 
 ---
 
