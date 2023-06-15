@@ -6,7 +6,7 @@ institute:
 date: "2023-06-30"
 output:
   xaringan::moon_reader:
-    lib_dir: docs/libs
+    lib_dir: libs
     css: 
       - rladies
       - rladies-fonts
@@ -144,7 +144,7 @@ layout: true
 
 ---
 
-```{r echo=FALSE, message=FALSE}
+```{r seine-map, echo=FALSE, message=FALSE}
 library(tmap)
 tm_shape(sf::st_as_sf(spData::seine)) + 
   tm_lines() + 
@@ -210,7 +210,7 @@ qgis_extract_output(result)
 
 ---
 
-```{r echo=FALSE}
+```{r seine-points-map, echo=FALSE}
 tm_shape(sf::st_as_sf(spData::seine)) + 
   tm_style("beaver") +
   tm_lines() + 
@@ -428,7 +428,7 @@ plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampl
 ```
 
 
-```{r fig.height=6, fig.width=8}
+```{r dem-plot, fig.height=6, fig.width=8}
 library(ggplot2)
 ggplot(data = buffer_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
