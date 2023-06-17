@@ -5,7 +5,7 @@ dir.create("docs", showWarnings = FALSE)
 xfun::Rscript_call(
     rmarkdown::render,
     list(input = "qgisprocess_foss4g.Rmd",
-         output_file= "index")
+         output_file = "index")
 )
 unlink("docs/index_files", recursive = TRUE)
 unlink("docs/libs/header-attrs", recursive = TRUE)

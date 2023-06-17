@@ -12,20 +12,14 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
 
-.title[
+
 # Interfacing QGIS processing from R
-]
-.author[
-### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace
-]
-.date[
-### 2023-06-30
-]
 
----
+&lt;img src="images/qgisprocess.svg" width="52%" style="display: block; margin: auto;" /&gt;
 
+
+.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
 
 
 
@@ -36,7 +30,7 @@ class: center, middle, inverse, title-slide
 }
 &lt;/style&gt;
 
-
+---
 # My involvement
 
 - Research Institute for Nature and Forest (INBO) &amp; Open Science
@@ -53,27 +47,27 @@ class: center, middle, inverse, title-slide
 
 # About R
 
-- free and open-source, cross-platform
+- Free and open-source, cross-platform
 
 --
 
-- easy-to-learn interactive programming language
+- Easy-to-learn interactive programming language
 
 --
 
-- data manipulation, calculation and graphical display
+- Data manipulation, calculation and graphical display
 
 --
 
-- much built-in functionality for statisticians
+- Much built-in functionality for statisticians
 
 --
 
-- strong ties to scientific research
+- Strong ties to scientific research
 
 --
 
-- vast package ecosystem
+- Vast package ecosystem
 
 --
 
@@ -90,7 +84,7 @@ available.packages() |&gt; nrow()
 
 --
 
-- packages to represent, analyze or visualize geospatial data
+- Packages to represent, analyze or visualize geospatial data
 
   - very popular packages are **sf** and **terra**
 
@@ -116,7 +110,7 @@ available.packages() |&gt; nrow()
 
 --
 
-- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers.
+- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers
 
 ---
 layout: true
@@ -126,7 +120,7 @@ class: animated, bounceInLeft
 
 ---
 
-- formerly: packages **RQGIS** and  **RQGIS3** (Muenchow &amp; Schratz) for QGIS 2 and 3
+- Formerly: packages **RQGIS** and  **RQGIS3** (Muenchow &amp; Schratz) for QGIS 2 and 3
 
 --
 
@@ -146,7 +140,7 @@ class: animated, bounceInLeft
   
 --
 
-- since QGIS 3.16: packages **qgisprocess** &amp; **qgis**
+- Since QGIS 3.16: packages **qgisprocess** &amp; **qgis**
 
 --
 
@@ -158,7 +152,7 @@ class: animated, bounceInLeft
   
 --
 
-  - currently developed
+  - actively developed
 
 ---
 
@@ -195,11 +189,11 @@ layout: true
 
 ---
 
-![](index_files/figure-html/seine-map-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/seine-map-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-Load R package.
+Load the R package:
 
 
 ```r
@@ -240,7 +234,7 @@ seine_path &lt;- file.path("data/seine.gpkg")
 
 ---
 
-Run algorithm.
+Run algorithm:
 
 
 ```r
@@ -285,14 +279,14 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e6370c9e32.gpkg"
+## [1] "/tmp/Rtmp6lnRZh/file218bb5228e/file218b2cc63ea0.gpkg"
 ## attr(,"class")
 ## [1] "qgis_outputVector"
 ```
 
 ---
 
-![](index_files/figure-html/seine-points-map-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/seine-points-map-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 layout: true
@@ -487,7 +481,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ##  $ MAX             : num 547
 ##  $ MEAN            : num 348
 ##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e62057fc1"
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/Rtmp6lnRZh/file218bb5228e/file218b55282810"
 ##  $ RANGE           : num 406
 ##  $ STD_DEV         : num 80.2
 ##  $ SUM             : num 1605135
@@ -506,7 +500,7 @@ layout: true
 
 By default, the `OUTPUT` element is selected by `qgis_extract_output()`.
 
-- typically contains a file path.
+- typically contains a file path
 
 ---
 
@@ -581,7 +575,8 @@ layout:false
 ```r
 seine_points_buffer &lt;- seine |&gt; 
   qgis_run_algorithm_p("native:pointsalonglines", DISTANCE = 1e4) |&gt; 
-  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000, OUTPUT = "data/buffer.gpkg")
+  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000,
+                       OUTPUT = "data/buffer.gpkg")
 seine_points_buffer
 ```
 
@@ -606,7 +601,7 @@ seine |&gt;
 ```
 ## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 ## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e67aadef6d.gpkg"
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/Rtmp6lnRZh/file218bb5228e/file218b78f6cee2.gpkg"
 ```
 
 ---
@@ -616,7 +611,7 @@ layout:true
 
 ---
 
-&lt;img src="images/qgis_copy_json.png" width="800px" /&gt;
+&lt;img src="images/qgis_copy_json.png" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -725,7 +720,7 @@ ggplot(data = zonal_stats,
   labs(y = "elevation [m]", title = plottitle)
 ```
 
-![](index_files/figure-html/dem-plot-1.png)&lt;!-- --&gt;
+&lt;img src="index_files/figure-html/dem-plot-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 

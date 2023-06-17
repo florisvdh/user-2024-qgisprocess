@@ -6,6 +6,7 @@ institute:
 date: "2023-06-30"
 output:
   xaringan::moon_reader:
+    seal: false
     lib_dir: libs
     css: 
       - rladies
@@ -17,6 +18,15 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+# Interfacing QGIS processing from R
+
+```{r echo=FALSE, out.width='52%', fig.align='center'}
+knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
+```
+
+
+.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
@@ -32,7 +42,7 @@ library(units)
 }
 </style>
 
-
+---
 # My involvement
 
 - Research Institute for Nature and Forest (INBO) & Open Science
@@ -49,27 +59,27 @@ library(units)
 
 # About R
 
-- free and open-source, cross-platform
+- Free and open-source, cross-platform
 
 --
 
-- easy-to-learn interactive programming language
+- Easy-to-learn interactive programming language
 
 --
 
-- data manipulation, calculation and graphical display
+- Data manipulation, calculation and graphical display
 
 --
 
-- much built-in functionality for statisticians
+- Much built-in functionality for statisticians
 
 --
 
-- strong ties to scientific research
+- Strong ties to scientific research
 
 --
 
-- vast package ecosystem
+- Vast package ecosystem
 
 --
 
@@ -81,7 +91,7 @@ available.packages() |> nrow()
 
 --
 
-- packages to represent, analyze or visualize geospatial data
+- Packages to represent, analyze or visualize geospatial data
 
   - very popular packages are **sf** and **terra**
 
@@ -107,7 +117,7 @@ available.packages() |> nrow()
 
 --
 
-- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers.
+- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers
 
 ---
 layout: true
@@ -117,7 +127,7 @@ class: animated, bounceInLeft
 
 ---
 
-- formerly: packages **RQGIS** and  **RQGIS3** (Muenchow & Schratz) for QGIS 2 and 3
+- Formerly: packages **RQGIS** and  **RQGIS3** (Muenchow & Schratz) for QGIS 2 and 3
 
 --
 
@@ -137,7 +147,7 @@ class: animated, bounceInLeft
   
 --
 
-- since QGIS 3.16: packages **qgisprocess** & **qgis**
+- Since QGIS 3.16: packages **qgisprocess** & **qgis**
 
 --
 
@@ -149,7 +159,7 @@ class: animated, bounceInLeft
   
 --
 
-  - currently developed
+  - actively developed
 
 ---
 
@@ -186,15 +196,15 @@ layout: true
 
 ---
 
-```{r seine-map, echo=FALSE, message=FALSE}
+```{r seine-map, echo=FALSE, message=FALSE, fig.align='center'}
 library(tmap)
-tm_shape(sf::st_as_sf(spData::seine)) + 
+tm_shape(spData::seine) + 
   tm_lines() + 
   tm_style("beaver") + 
   tm_compass(type = "arrow", position = c("right", "top")) + 
-  tm_scale_bar(position = "left") +
+  tm_scale_bar(position = "left", breaks = c(0, 30, 60), text.size = 1) +
   tm_layout(
-    "'seine' dataset from spData package", 
+    "'seine' dataset from the spData package", 
     title.position = c("center", "top"), 
     title.fontfamily = "sans"
     )
@@ -204,7 +214,7 @@ sf::write_sf(spData::seine, seine_path)
 
 ---
 
-Load R package.
+Load the R package:
 
 ```{r}
 library(qgisprocess)
@@ -221,7 +231,7 @@ seine_path <- file.path("data/seine.gpkg")
 
 ---
 
-Run algorithm.
+Run algorithm:
 
 ```{r}
 result <- qgis_run_algorithm(
@@ -252,14 +262,14 @@ qgis_extract_output(result)
 
 ---
 
-```{r seine-points-map, echo=FALSE}
-tm_shape(sf::st_as_sf(spData::seine)) + 
+```{r seine-points-map, echo=FALSE, fig.align='center'}
+tm_shape(spData::seine) + 
   tm_style("beaver") +
   tm_lines() + 
   tm_shape(sf::st_as_sf(result)) +
   tm_dots(col = "blue", size = 0.1) +
   tm_compass(type = "arrow", position = c("right", "top")) + 
-  tm_scale_bar(position = "left")
+  tm_scale_bar(position = "left", breaks = c(0, 30, 60), text.size = 1)
 ```
 
 ---
@@ -354,7 +364,7 @@ layout: true
 
 By default, the `OUTPUT` element is selected by `qgis_extract_output()`.
 
-- typically contains a file path.
+- typically contains a file path
 
 ---
 
@@ -412,7 +422,8 @@ layout:false
 ```{r message=FALSE}
 seine_points_buffer <- seine |> 
   qgis_run_algorithm_p("native:pointsalonglines", DISTANCE = 1e4) |> 
-  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000, OUTPUT = "data/buffer.gpkg")
+  qgis_run_algorithm_p("native:buffer", DISTANCE = 1000,
+                       OUTPUT = "data/buffer.gpkg")
 seine_points_buffer
 ```
 
@@ -434,7 +445,7 @@ layout:true
 
 ---
 
-```{r echo=FALSE, out.width='800px'}
+```{r echo=FALSE, out.width='100%', fig.align='center'}
 knitr::include_graphics("images/qgis_copy_json.png", error = FALSE)
 ```
 
@@ -500,7 +511,7 @@ plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampl
 ```
 
 
-```{r dem-plot, fig.height=6, fig.width=8}
+```{r dem-plot, fig.height=6, fig.width=8, fig.align='center'}
 library(ggplot2)
 ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
