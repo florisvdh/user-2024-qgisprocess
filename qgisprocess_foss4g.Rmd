@@ -6,6 +6,7 @@ institute:
 date: "2023-06-30"
 output:
   xaringan::moon_reader:
+    seal: false
     lib_dir: libs
     css: 
       - rladies
@@ -17,6 +18,15 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+# Interfacing QGIS processing from R
+
+```{r echo=FALSE, out.width='52%', fig.align='center'}
+knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
+```
+
+
+.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
@@ -32,7 +42,7 @@ library(units)
 }
 </style>
 
-
+---
 # My involvement
 
 - Research Institute for Nature and Forest (INBO) & Open Science
@@ -501,7 +511,7 @@ plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampl
 ```
 
 
-```{r dem-plot, fig.height=6, fig.width=8}
+```{r dem-plot, fig.height=6, fig.width=8, fig.align='center'}
 library(ggplot2)
 ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
