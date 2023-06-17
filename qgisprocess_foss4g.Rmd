@@ -451,21 +451,33 @@ jsonlite::prettify(json_from_qgis)
 ---
 
 ```{r eval=FALSE}
-buffer_stats_path <- qgis_run_algorithm(
+zonal_stats_result <- qgis_run_algorithm(
   "native:zonalstatisticsfb", 
   .raw_json_input = json_from_qgis   #<<
 )
 ```
 
+```{r eval=FALSE, include=FALSE}
+saveRDS(zonal_stats_result, "data/zonal_stats_result.rds")
+```
+
 ```{r include=FALSE}
 # the native:zonalstatisticsfb algorithm was run on a tif file of approx 140 MB,
 # not included in the repo. The resulting gpkg therefore is included.
-buffer_stats_path <- readRDS("data/buffer_stats_path.rds")
+zonal_stats_result <- readRDS("data/zonal_stats_result.rds")
 ```
 
 
 ```{r}
-buffer_stats_path
+zonal_stats_result
+```
+
+```{r include=FALSE}
+# making the output path relative so that the fixed result object can be reused on 
+# other machines
+zonal_stats_result$OUTPUT <-
+  str_remove(zonal_stats_result$OUTPUT, ".*foss4g-2023-qgisprocess/") |>
+  structure(class = "qgis_outputVector")
 ```
 
 
@@ -475,10 +487,10 @@ layout:false
 # Further processing in R
 
 ```{r}
-buffer_stats <- sf::st_as_sf(buffer_stats_path) |> 
+zonal_stats <- sf::st_as_sf(zonal_stats_result) |> 
   sf::st_drop_geometry() |> 
   mutate(distance = set_units(distance, "m") |> set_units("km"))
-buffer_stats
+zonal_stats
 ```
 
 ---
@@ -490,7 +502,7 @@ plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampl
 
 ```{r dem-plot, fig.height=6, fig.width=8}
 library(ggplot2)
-ggplot(data = buffer_stats, 
+ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
   geom_line() +
   geom_ribbon(fill = "purple", alpha = 0.3) +

@@ -85,7 +85,7 @@ available.packages() |&gt; nrow()
 ```
 
 ```
-## [1] 19726
+## [1] 19724
 ```
 
 --
@@ -285,7 +285,7 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/RtmpIu2Ccv/fileb4ab5a65711a/fileb4ab534d2295.gpkg"
+## [1] "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e6370c9e32.gpkg"
 ## attr(,"class")
 ## [1] "qgis_outputVector"
 ```
@@ -487,7 +487,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ##  $ MAX             : num 547
 ##  $ MEAN            : num 348
 ##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpIu2Ccv/fileb4ab5a65711a/fileb4ab470a5e8c"
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e62057fc1"
 ##  $ RANGE           : num 406
 ##  $ STD_DEV         : num 80.2
 ##  $ SUM             : num 1605135
@@ -606,7 +606,7 @@ seine |&gt;
 ```
 ## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 ## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpIu2Ccv/fileb4ab5a65711a/fileb4ab1e2e125e.gpkg"
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpfHn4R8/file19e6a83c75b/file19e67aadef6d.gpkg"
 ```
 
 ---
@@ -654,7 +654,7 @@ jsonlite::prettify(json_from_qgis)
 
 
 ```r
-buffer_stats_path &lt;- qgis_run_algorithm(
+zonal_stats_result &lt;- qgis_run_algorithm(
   "native:zonalstatisticsfb", 
 * .raw_json_input = json_from_qgis
 )
@@ -664,8 +664,10 @@ buffer_stats_path &lt;- qgis_run_algorithm(
 
 
 
+
+
 ```r
-buffer_stats_path
+zonal_stats_result
 ```
 
 ```
@@ -675,6 +677,8 @@ buffer_stats_path
 ```
 
 
+
+
 ---
 layout:false
 
@@ -682,10 +686,10 @@ layout:false
 
 
 ```r
-buffer_stats &lt;- sf::st_as_sf(buffer_stats_path) |&gt; 
+zonal_stats &lt;- sf::st_as_sf(zonal_stats_result) |&gt; 
   sf::st_drop_geometry() |&gt; 
   mutate(distance = set_units(distance, "m") |&gt; set_units("km"))
-buffer_stats
+zonal_stats
 ```
 
 ```
@@ -713,7 +717,7 @@ buffer_stats
 
 ```r
 library(ggplot2)
-ggplot(data = buffer_stats, 
+ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
   geom_line() +
   geom_ribbon(fill = "purple", alpha = 0.3) +
