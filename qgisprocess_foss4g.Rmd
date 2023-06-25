@@ -16,20 +16,16 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightLanguage: ["r"]
       countIncrementalSlides: false
+      ratio: "16:9"
 ---
 
-# Interfacing QGIS processing from R
-
-```{r echo=FALSE, out.width='52%', fig.align='center'}
-knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
-```
-
-
-.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
-
 ```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
+options(
+  htmltools.dir.version = FALSE,
+  knitr.table.format = "html"
+  )
 library(dplyr)
 library(stringr)
 library(units)
@@ -42,19 +38,33 @@ library(units)
 }
 </style>
 
+# Interfacing QGIS processing from R
+
+```{r echo=FALSE, out.width='35%', fig.align='center'}
+knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
+```
+
+
+.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
+
 ---
+class: center, middle
+
 # My involvement
 
-- Research Institute for Nature and Forest (INBO) & Open Science
+Research Institute for Nature and Forest (INBO), Brussels, Belgium
 
-- Helping other scientists to use R in ecology
+INBO & Open Science
 
-- Contributing to open source applications
+Helping other scientists to use R in ecology
 
-- Current maintainer of **qgisprocess**
+Contributing to open source applications
 
-.center[.footnote[[github.com/florisvdh](https://github.com/florisvdh)]]
+Current maintainer of **qgisprocess**
 
+<br/>
+
+[@florisvdh `r fontawesome::fa("github", a11y = "sem")`](https://github.com/florisvdh) [`r fontawesome::fa("mastodon", a11y = "sem")`](https://fosstodon.org/@florisvdh)  [`r fontawesome::fa("orcid", a11y = "sem")`](https://orcid.org/0000-0002-6378-6229)
 ---
 
 # About R
@@ -94,10 +104,17 @@ available.packages() |> nrow()
 - Packages to represent, analyze or visualize geospatial data
 
   - very popular packages are **sf** and **terra**
+--
+  - OSGeo project R-Spatial!
+
+---
+class: inverse, middle, center
+
+# Why interface QGIS from R?
 
 ---
 
-# Main advantages of interfacing QGIS from R
+# Main advantages of interfacing QGIS processing from R
 
 --
 
@@ -190,6 +207,11 @@ layout: false
   - https://jancaha.github.io/r_package_qgis/
 
 ---
+class: inverse, center, middle
+
+# A simple example
+
+---
 layout: true
 
 # Basic usage
@@ -273,6 +295,12 @@ tm_shape(spData::seine) +
 ```
 
 ---
+layout: false
+class: inverse, center, middle
+
+# Handy functions
+
+---
 layout: true
 
 # Finding algorithms
@@ -286,7 +314,7 @@ qgis_search_algorithms(algorithm = "point.*line")
 ```{r echo=FALSE}
 qgis_search_algorithms(algorithm = "point.*line") |> 
   select(provider, algorithm, algorithm_title) |> 
-  knitr::kable()
+  knitr::kable(format = "html")
 ```
 
 ---
@@ -416,6 +444,11 @@ stars::st_as_stars(result)
 
 ---
 layout:false
+class: inverse, center, middle
+
+# Extra!<br/><br/>Extra!
+
+---
 
 # Algorithm piping
 
@@ -501,6 +534,7 @@ layout:false
 zonal_stats <- sf::st_as_sf(zonal_stats_result) |> 
   sf::st_drop_geometry() |> 
   mutate(distance = set_units(distance, "m") |> set_units("km"))
+
 zonal_stats
 ```
 
@@ -522,8 +556,18 @@ ggplot(data = zonal_stats,
 ```
 
 ---
+class: inverse, center, middle
+
+# Online documentation
+
+---
+class: center
 
 # Cheat sheet !
+
+```{r echo=FALSE}
+knitr::include_url("https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png", "460px")
+```
 
 ---
 
@@ -556,6 +600,7 @@ knitr::include_url("https://jancaha.github.io/r_package_qgis/reference/index.htm
 
 
 ---
+class: inverse, center, middle
 
 # Contributors – thanks so much
 
