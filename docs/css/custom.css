@@ -1,0 +1,42 @@
+/*-- Extracts from https://github.com/spcanelon/xaringan-basics-and-beyond --*/
+
+/*-- TABLES --*/
+.remark-slide table {
+  margin:              auto;
+  border-top:          1px solid #768692;
+  border-bottom:       1px solid #768692;
+}
+
+/*-- Table header --*/
+.remark-slide table thead th {
+  border-bottom:       1px solid #768692;
+}
+
+/*-- Table rows (even) --*/
+.remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
+  background:          #E8EDEE;
+}
+
+.pull-left {
+  padding-top: 0px;
+}
+
+.pull-left-narrow {
+  float: left;
+  width: 20%;
+}
+
+.pull-right-wide {
+  float: right;
+  width: 75%;
+}
+
+/*-- Footnote --*/
+.footnote {
+  position:           absolute;
+  bottom:             2em;
+  padding-right:      4em;
+  font-size:          70%;
+  line-height:        1em;
+}
+

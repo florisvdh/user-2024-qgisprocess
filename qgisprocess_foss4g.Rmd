@@ -9,9 +9,10 @@ output:
     seal: false
     lib_dir: libs
     css: 
+      - default
       - rladies
       - rladies-fonts
-      - "css/animate.min.css"
+      - css/custom.css
     chakra: libs/remark-latest.min.js
     nature:
       highlightStyle: github
@@ -38,14 +39,15 @@ library(units)
 }
 </style>
 
-# Interfacing QGIS processing from R
+# .center[Interfacing QGIS processing from R]
 
-```{r echo=FALSE, out.width='35%', fig.align='center'}
+```{r echo=FALSE, out.width='30%', fig.align='center'}
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ```
 
+.pull-left[.footnote[![](images/FOSS4G 2023 - Logo Main.png)]]
 
-.footnote[### Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]
+## .pull-right[.footnote[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]]
 
 ---
 class: center, middle
@@ -81,7 +83,7 @@ Current maintainer of **qgisprocess**
 
 --
 
-- Much built-in functionality for statisticians
+- Many numerical computing capabilities & statistical techniques built-in
 
 --
 
@@ -89,24 +91,16 @@ Current maintainer of **qgisprocess**
 
 --
 
-- Vast package ecosystem
-
---
-
-```{r}
-# HOW MANY PACKAGES ARE AVAILABLE AT CRAN? (Comprehensive R Archive Network)
-
-available.packages() |> nrow()
-```
+- Vast package ecosystem: currently `r available.packages() |> nrow()` packages on CRAN
 
 --
 
 - Packages to represent, analyze or visualize geospatial data
 
-  - very popular packages are **sf** and **terra**
---
-  - OSGeo project R-Spatial!
+  - some popular packages: **sf**, **terra**, **mapview**, **tmap**
 
+  - many more are availabe: <https://cran.r-project.org/view=Spatial>
+  
 ---
 class: inverse, middle, center
 
@@ -138,7 +132,6 @@ class: inverse, middle, center
 
 ---
 layout: true
-class: animated, bounceInLeft
 
 # Interfacing QGIS processing from R
 
@@ -156,7 +149,7 @@ class: animated, bounceInLeft
   
 --
 
-  - with **RQGIS3**, crashes were observed in RStudio
+  - **RQGIS3** was hard to maintain wrt provider changes in QGIS; also, crashes were observed in RStudio IDE
   
 --
 
@@ -168,7 +161,7 @@ class: animated, bounceInLeft
 
 --
 
-  - use the recent standalone `qgis_process` shell command from QGIS
+  - use the recent standalone `qgis_process` shell command from QGIS = a unified entry to all providers and algorithms!
 
 --
 
@@ -242,6 +235,8 @@ Load the R package:
 library(qgisprocess)
 ```
 
+---
+
 ```{r}
 seine_path <- file.path("data/seine.gpkg")
 ```
@@ -298,7 +293,7 @@ tm_shape(spData::seine) +
 layout: false
 class: inverse, center, middle
 
-# Handy functions
+# Convenient functions
 
 ---
 layout: true
@@ -377,6 +372,11 @@ hierarchical types (e.g. aggregates) | nested list
 library(terra)
 elev <- rast(system.file("ex/elev.tif", package = "terra"))
 class(elev)
+```
+
+--
+
+```{r message=FALSE}
 qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ```
 
@@ -478,7 +478,7 @@ layout:true
 
 ---
 
-```{r echo=FALSE, out.width='100%', fig.align='center'}
+```{r echo=FALSE, out.width='90%', fig.align='center'}
 knitr::include_graphics("images/qgis_copy_json.png", error = FALSE)
 ```
 
@@ -602,7 +602,35 @@ knitr::include_url("https://jancaha.github.io/r_package_qgis/reference/index.htm
 ---
 class: inverse, center, middle
 
-# Contributors – thanks so much
+# Contributors
+
+<a href="https://github.com/florisvdh" class="" data-hovercard-type="user" data-hovercard-url="/users/florisvdh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/paleolimbot" class="" data-hovercard-type="user" data-hovercard-url="/users/paleolimbot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/10995762?s=64&amp;v=4" alt="@paleolimbot" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/jannes-m" class="" data-hovercard-type="user" data-hovercard-url="/users/jannes-m/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/9986952?s=64&amp;v=4" alt="@jannes-m" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/JanCaha" class="" data-hovercard-type="user" data-hovercard-url="/users/JanCaha/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/7641902?s=64&amp;v=4" alt="@JanCaha" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/Robinlovelace" class="" data-hovercard-type="user" data-hovercard-url="/users/Robinlovelace/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/1825120?s=64&amp;v=4" alt="@Robinlovelace" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/ambarja" class="" data-hovercard-type="user" data-hovercard-url="/users/ambarja/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/23284899?s=64&amp;v=4" alt="@ambarja" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/Nowosad" class="" data-hovercard-type="user" data-hovercard-url="/users/Nowosad/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/3457131?s=64&amp;v=4" alt="@Nowosad" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/loreabad6" class="" data-hovercard-type="user" data-hovercard-url="/users/loreabad6/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/10034237?s=64&amp;v=4" alt="@loreabad6" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
+      <a href="https://github.com/gavg712" class="" data-hovercard-type="user" data-hovercard-url="/users/gavg712/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+        <img src="https://avatars.githubusercontent.com/u/8514904?s=64&amp;v=4" alt="@gavg712" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+      </a>
 
 
 ---
@@ -610,6 +638,6 @@ class: inverse, center, middle
 
 # Questions?<br/><br/>Ideas?
 
-
+.footnote[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess/>]
 
 
