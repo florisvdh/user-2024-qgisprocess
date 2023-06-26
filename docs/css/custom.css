@@ -1,5 +1,3 @@
-/*-- Extracts from https://github.com/spcanelon/xaringan-basics-and-beyond --*/
-
 /*-- TABLES --*/
 .remark-slide table {
   margin:              auto;
@@ -28,8 +26,9 @@
 
 .pull-right-wide {
   float: right;
-  width: 75%;
+  width: 55%;
 }
+
 
 /*-- Footnote --*/
 .footnote {
@@ -38,5 +37,10 @@
   padding-right:      4em;
   font-size:          70%;
   line-height:        1em;
+}
+
+.hljs-github .hljs-comment, .hljs-github .hljs-quote {
+	color: #68685c;
+	font-style: italic;
 }
 

@@ -45,9 +45,9 @@ library(units)
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ```
 
-.pull-left[.footnote[![](images/FOSS4G 2023 - Logo Main.png)]]
+.pull-left[.footnote[<img src="images/FOSS4G 2023 - Logo Main.png" width="30%"/>]]
 
-## .pull-right[.footnote[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace | 2023-06-30]]
+## .pull-right-wide[.footnote[.right[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace 2023-06-30]]]
 
 ---
 class: center, middle
@@ -104,11 +104,11 @@ Current maintainer of **qgisprocess**
 ---
 class: inverse, middle, center
 
-# Why interface QGIS from R?
+# Why interface QGIS processing from R?
 
 ---
 
-# Main advantages of interfacing QGIS processing from R
+# Main advantages
 
 --
 
@@ -175,7 +175,7 @@ layout: true
 
 ```
 $ qgis_process
-QGIS Processing Executor - 3.30.3-'s-Hertogenbosch ''s-Hertogenbosch' (3.30.3-'s-Hertogenbosch)
+QGIS Processing Executor - 3.32.0-Lima 'Lima' (3.32.0-Lima)
 Usage: /usr/bin/qgis_process.bin [--help] [--version] [--json] [--verbose] [--no-python] 
 [command] [algorithm id, path to model file, or path to Python script] [parameters]
 
@@ -343,6 +343,7 @@ layout: true
 
 Spatial QGIS argument types
 
+<br/>
 
 input argument | R object
 :------ | :---
@@ -355,6 +356,9 @@ crs | various CRS objects
 ---
 
 Non-spatial QGIS argument types:
+
+<br/>
+
 
 input argument | R object
 :------ | :---
@@ -563,14 +567,6 @@ class: inverse, center, middle
 ---
 class: center
 
-# Cheat sheet !
-
-```{r echo=FALSE}
-knitr::include_url("https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png", "460px")
-```
-
----
-
 # <https://r-spatial.github.io/qgisprocess>
 
 ```{r echo=FALSE}
@@ -578,11 +574,21 @@ knitr::include_url("https://r-spatial.github.io/qgisprocess/reference/index.html
 ```
 
 ---
+class: center
 
 # <https://jancaha.github.io/r_package_qgis>
 
 ```{r echo=FALSE}
 knitr::include_url("https://jancaha.github.io/r_package_qgis/reference/index.html", "460px")
+```
+
+---
+class: center
+
+# Cheat sheet !
+
+```{r echo=FALSE, out.width='60%'}
+knitr::include_graphics("https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png")
 ```
 
 ---
@@ -597,7 +603,6 @@ knitr::include_url("https://jancaha.github.io/r_package_qgis/reference/index.htm
 - Expand function documentation
 
 - Adapt to `qgis_process` development
-
 
 ---
 class: inverse, center, middle
@@ -638,6 +643,6 @@ class: inverse, center, middle
 
 # Questions?<br/><br/>Ideas?
 
-.footnote[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess/>]
+### .footnote[.center[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess/>]]
 
 
