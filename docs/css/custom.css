@@ -1,3 +1,21 @@
+h1, h2, h3 {
+  font-weight: normal;
+  color: #3a6321;
+}
+a, a > code {
+  color: #7f9624;
+}
+
+.inverse {
+  background-color: #3a6321;
+}
+.inverse, .inverse h1, .inverse h2, .inverse h3, .inverse a, inverse a > code {
+  color: #f0e64a;
+}
+
+.remark-code, .remark-inline-code { font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; color: #6a7b26}
+
+
 /*-- TABLES --*/
 .remark-slide table {
   margin:              auto;
@@ -12,7 +30,12 @@
 
 /*-- Table rows (even) --*/
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
-  background:          #E8EDEE;
+  background:          #f5f9e4;
+}
+
+.remark-code-line-highlighted {
+	background-color: #ff80;
+	font-weight: bold;
 }
 
 .pull-left {
@@ -26,7 +49,7 @@
 
 .pull-right-wide {
   float: right;
-  width: 55%;
+  width: 65%;
 }
 
 
@@ -40,7 +63,7 @@
 }
 
 .hljs-github .hljs-comment, .hljs-github .hljs-quote {
-	color: #68685c;
+	color: #566225;
 	font-style: italic;
 }
 

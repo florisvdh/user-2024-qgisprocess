@@ -10,7 +10,6 @@ output:
     lib_dir: libs
     css: 
       - default
-      - rladies
       - rladies-fonts
       - css/custom.css
     chakra: libs/remark-latest.min.js
@@ -19,7 +18,7 @@ output:
       highlightLines: true
       highlightLanguage: ["r"]
       countIncrementalSlides: false
-      ratio: "16:9"
+      ratio: "16:10"
 ---
 
 ```{r setup, include=FALSE}
@@ -32,16 +31,9 @@ library(stringr)
 library(units)
 ```
 
-<style type="text/css">
-.remark-code-line-highlighted {
-	background-color: #ff80;
-	font-weight: bold;
-}
-</style>
-
 # .center[Interfacing QGIS processing from R]
 
-```{r echo=FALSE, out.width='30%', fig.align='center'}
+```{r echo=FALSE, out.width='35%', fig.align='center'}
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ```
 
@@ -50,10 +42,11 @@ knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ## .pull-right-wide[.footnote[.right[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace 2023-06-30]]]
 
 ---
-class: center, middle
+class: middle
 
-# My involvement
+# .center[My involvement]
 
+.center[
 Research Institute for Nature and Forest (INBO), Brussels, Belgium
 
 INBO & Open Science
@@ -67,6 +60,12 @@ Current maintainer of **qgisprocess**
 <br/>
 
 [@florisvdh `r fontawesome::fa("github", a11y = "sem")`](https://github.com/florisvdh) [`r fontawesome::fa("mastodon", a11y = "sem")`](https://fosstodon.org/@florisvdh)  [`r fontawesome::fa("orcid", a11y = "sem")`](https://orcid.org/0000-0002-6378-6229)
+]
+
+.footnote[.left[<img src="images/flanders.png" width="30%"/>]]
+
+.pull-right[.footnote[.right[<img src="images/inbo.jpg" width="55%"/>]]]
+
 ---
 
 # About R
@@ -330,8 +329,33 @@ layout:false
 # Algorithm documentation
 
 
-```{r}
+```{r eval=FALSE}
 qgis_show_help("native:pointsalonglines")
+```
+
+
+```{r eval=FALSE}
+## Points along geometry (native:pointsalonglines)
+## 
+## ----------------
+## Description
+## ----------------
+## Creates regularly spaced points along line features.
+## This algorithm creates a points layer, with points distributed along the lines of an input vector layer. The distance between points (measured along the line) is defined as a parameter.
+## 
+## Start and end offset distances can be defined, so the first and last point will not fall exactly on the line's first and last nodes. These start and end offsets are defined as distances, measured along the line from the first and last nodes of the lines.
+## 
+## ----------------
+## Arguments
+## ----------------
+## 
+## INPUT: Input layer
+##     Argument type:    source
+##     Acceptable values:
+##         - Path to a vector layer
+## DISTANCE: Distance
+##     Default value:    1
+## .....
 ```
 
 ---
@@ -482,7 +506,7 @@ layout:true
 
 ---
 
-```{r echo=FALSE, out.width='90%', fig.align='center'}
+```{r echo=FALSE, out.width='100%', fig.align='center'}
 knitr::include_graphics("images/qgis_copy_json.png", error = FALSE)
 ```
 
@@ -554,7 +578,7 @@ library(ggplot2)
 ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
   geom_line() +
-  geom_ribbon(fill = "purple", alpha = 0.3) +
+  geom_ribbon(fill = "#93b023", alpha = 0.3) +
   facet_wrap(~name, scales = "free_x") +
   labs(y = "elevation [m]", title = plottitle)
 ```
@@ -587,7 +611,7 @@ class: center
 
 # Cheat sheet !
 
-```{r echo=FALSE, out.width='60%'}
+```{r echo=FALSE, out.width='65%'}
 knitr::include_graphics("https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png")
 ```
 
@@ -610,7 +634,7 @@ class: inverse, center, middle
 # Contributors
 
 <a href="https://github.com/florisvdh" class="" data-hovercard-type="user" data-hovercard-url="/users/florisvdh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
+        <img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64" style="background-color:white;">
       </a>
       <a href="https://github.com/paleolimbot" class="" data-hovercard-type="user" data-hovercard-url="/users/paleolimbot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
         <img src="https://avatars.githubusercontent.com/u/10995762?s=64&amp;v=4" alt="@paleolimbot" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
@@ -643,6 +667,6 @@ class: inverse, center, middle
 
 # Questions?<br/><br/>Ideas?
 
-### .footnote[.center[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess/>]]
+### .pull-right-wide[.footnote[.right[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess/>]]]
 
 
