@@ -39,7 +39,7 @@ knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 
 .pull-left[.footnote[<img src="images/FOSS4G 2023 - Logo Main.png" width="30%"/>]]
 
-## .pull-right-wide[.footnote[.right[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace 2023-06-30]]]
+## .pull-right-wide[.footnote[.right[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace<br/>2023-06-30]]]
 
 ---
 class: middle
