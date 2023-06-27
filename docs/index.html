@@ -7,7 +7,6 @@
     <meta name="date" content="2023-06-30" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
     <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/custom.css" type="text/css" />
   </head>
@@ -17,26 +16,20 @@
 
 
 
-&lt;style type="text/css"&gt;
-.remark-code-line-highlighted {
-	background-color: #ff80;
-	font-weight: bold;
-}
-&lt;/style&gt;
-
 # .center[Interfacing QGIS processing from R]
 
-&lt;img src="images/qgisprocess.svg" width="30%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/qgisprocess.svg" width="35%" style="display: block; margin: auto;" /&gt;
 
 .pull-left[.footnote[&lt;img src="images/FOSS4G 2023 - Logo Main.png" width="30%"/&gt;]]
 
 ## .pull-right-wide[.footnote[.right[Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace 2023-06-30]]]
 
 ---
-class: center, middle
+class: middle
 
-# My involvement
+# .center[My involvement]
 
+.center[
 Research Institute for Nature and Forest (INBO), Brussels, Belgium
 
 INBO &amp; Open Science
@@ -50,6 +43,12 @@ Current maintainer of **qgisprocess**
 &lt;br/&gt;
 
 [@florisvdh <svg aria-label="GitHub" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><title>GitHub</title><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>](https://github.com/florisvdh) [<svg aria-label="Mastodon" role="img" viewBox="0 0 448 512" style="height:1em;width:0.88em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><title>Mastodon</title><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"/></svg>](https://fosstodon.org/@florisvdh)  [<svg aria-label="ORCID" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><title>ORCID</title><path d="M294.75 188.19h-45.92V342h47.47c67.62 0 83.12-51.34 83.12-76.91 0-41.64-26.54-76.9-84.67-76.9zM256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-80.79 360.76h-29.84v-207.5h29.84zm-14.92-231.14a19.57 19.57 0 1 1 19.57-19.57 19.64 19.64 0 0 1-19.57 19.57zM300 369h-81V161.26h80.6c76.73 0 110.44 54.83 110.44 103.85C410 318.39 368.38 369 300 369z"/></svg>](https://orcid.org/0000-0002-6378-6229)
+]
+
+.footnote[.left[&lt;img src="images/flanders.png" width="30%"/&gt;]]
+
+.pull-right[.footnote[.right[&lt;img src="images/inbo.jpg" width="55%"/&gt;]]]
+
 ---
 
 # About R
@@ -74,7 +73,7 @@ Current maintainer of **qgisprocess**
 
 --
 
-- Vast package ecosystem: currently 19764 packages on CRAN
+- Vast package ecosystem: currently 19768 packages on CRAN
 
 --
 
@@ -286,7 +285,7 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/Rtmp29PzDU/file8bb82c89af1d/file8bb86d363a2d.gpkg"
+## [1] "/tmp/RtmpbUAeVy/file6b4a18ad2ff6/file6b4a577084cd.gpkg"
 ## attr(,"class")
 ## [1] "qgis_outputVector"
 ```
@@ -429,7 +428,9 @@ layout:false
 qgis_show_help("native:pointsalonglines")
 ```
 
-```
+
+
+```r
 ## Points along geometry (native:pointsalonglines)
 ## 
 ## ----------------
@@ -445,41 +446,12 @@ qgis_show_help("native:pointsalonglines")
 ## ----------------
 ## 
 ## INPUT: Input layer
-## 	Argument type:	source
-## 	Acceptable values:
-## 		- Path to a vector layer
+##     Argument type:    source
+##     Acceptable values:
+##         - Path to a vector layer
 ## DISTANCE: Distance
-## 	Default value:	1
-## 	Argument type:	distance
-## 	Acceptable values:
-## 		- A numeric value
-## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
-## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
-## START_OFFSET: Start offset
-## 	Default value:	0
-## 	Argument type:	distance
-## 	Acceptable values:
-## 		- A numeric value
-## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
-## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
-## END_OFFSET: End offset
-## 	Default value:	0
-## 	Argument type:	distance
-## 	Acceptable values:
-## 		- A numeric value
-## 		- field:FIELD_NAME to use a data defined value taken from the FIELD_NAME field
-## 		- expression:SOME EXPRESSION to use a data defined value calculated using a custom QGIS expression
-## OUTPUT: Interpolated points
-## 	Argument type:	sink
-## 	Acceptable values:
-## 		- Path for new vector layer
-## 
-## ----------------
-## Outputs
-## ----------------
-## 
-## OUTPUT: &lt;outputVector&gt;
-## 	Interpolated points
+##     Default value:    1
+## .....
 ```
 
 ---
@@ -546,7 +518,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ##  $ MAX             : num 547
 ##  $ MEAN            : num 348
 ##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/Rtmp29PzDU/file8bb82c89af1d/file8bb844b71b46"
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpbUAeVy/file6b4a18ad2ff6/file6b4a8fe6da9"
 ##  $ RANGE           : num 406
 ##  $ STD_DEV         : num 80.2
 ##  $ SUM             : num 1605135
@@ -671,7 +643,7 @@ seine |&gt;
 ```
 ## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 ## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/Rtmp29PzDU/file8bb82c89af1d/file8bb8210c2bf4.gpkg"
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpbUAeVy/file6b4a18ad2ff6/file6b4a769e772b.gpkg"
 ```
 
 ---
@@ -681,7 +653,7 @@ layout:true
 
 ---
 
-&lt;img src="images/qgis_copy_json.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/qgis_copy_json.png" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -786,7 +758,7 @@ library(ggplot2)
 ggplot(data = zonal_stats, 
        aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
   geom_line() +
-  geom_ribbon(fill = "purple", alpha = 0.3) +
+  geom_ribbon(fill = "#93b023", alpha = 0.3) +
   facet_wrap(~name, scales = "free_x") +
   labs(y = "elevation [m]", title = plottitle)
 ```
@@ -817,7 +789,7 @@ class: center
 
 # Cheat sheet !
 
-&lt;img src="https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png" width="60%" /&gt;
+&lt;img src="https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png" width="65%" /&gt;
 
 ---
 
@@ -838,7 +810,7 @@ class: inverse, center, middle
 # Contributors
 
 &lt;a href="https://github.com/florisvdh" class="" data-hovercard-type="user" data-hovercard-url="/users/florisvdh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self"&gt;
-        &lt;img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64"&gt;
+        &lt;img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64" style="background-color:white;"&gt;
       &lt;/a&gt;
       &lt;a href="https://github.com/paleolimbot" class="" data-hovercard-type="user" data-hovercard-url="/users/paleolimbot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self"&gt;
         &lt;img src="https://avatars.githubusercontent.com/u/10995762?s=64&amp;amp;v=4" alt="@paleolimbot" size="64" data-view-component="true" class="avatar circle" width="64" height="64"&gt;
@@ -871,7 +843,7 @@ class: inverse, center, middle
 
 # Questions?&lt;br/&gt;&lt;br/&gt;Ideas?
 
-### .footnote[.center[Slides: &lt;https://florisvdh.github.io/foss4g-2023-qgisprocess/&gt;]]
+### .pull-right-wide[.footnote[.right[Slides: &lt;https://florisvdh.github.io/foss4g-2023-qgisprocess/&gt;]]]
 
 
     </textarea>
@@ -882,7 +854,7 @@ class: inverse, center, middle
 "highlightLines": true,
 "highlightLanguage": "r",
 "countIncrementalSlides": false,
-"ratio": "16:9"
+"ratio": "16:10"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
