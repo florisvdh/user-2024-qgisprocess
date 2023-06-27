@@ -5,3 +5,4 @@
 *.gpkg
 !zonal_stats.gpkg
 dem_clip.*
+*.pdf
