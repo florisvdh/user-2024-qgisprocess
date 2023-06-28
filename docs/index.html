@@ -53,6 +53,8 @@ Current maintainer of **qgisprocess**
 
 # About R
 
+--
+
 - Free and open-source, cross-platform
 
 --
@@ -61,11 +63,11 @@ Current maintainer of **qgisprocess**
 
 --
 
-- Data manipulation, calculation and graphical display
+- Data manipulation, calculation and visualization
 
 --
 
-- Many numerical computing capabilities &amp; statistical techniques built-in
+- Numerical computing &amp; statistics built-in
 
 --
 
@@ -73,7 +75,7 @@ Current maintainer of **qgisprocess**
 
 --
 
-- Vast package ecosystem: currently 19769 packages on CRAN
+- Vast package ecosystem: currently 19773 packages on CRAN
 
 --
 
@@ -98,7 +100,7 @@ class: inverse, middle, center
 
 --
 
-- Get all other processing capabilities of R
+- Still have all other processing capabilities of R
 
 --
 
@@ -112,6 +114,15 @@ class: inverse, middle, center
 
 - Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers
 
+&lt;br/&gt;
+
+.center[
+&lt;img src="images/qgis.svg" width="10%" hspace="15vw"/&gt;
+&lt;img src="images/grass.svg" width="10%" hspace="15vw"/&gt;
+&lt;img src="images/saga.png" width="10%" hspace="15vw"/&gt;
+&lt;img src="images/gdal.svg" width="10%"/&gt;
+]
+
 ---
 layout: true
 
@@ -121,36 +132,22 @@ layout: true
 
 - Formerly: packages **RQGIS** and  **RQGIS3** (Muenchow &amp; Schratz) for QGIS 2 and 3
 
---
-
   - use the QGIS Python API
-
---
 
   - set QGIS environment variables
   
---
-
   - **RQGIS3** was hard to maintain wrt provider changes in QGIS; also, crashes were observed in RStudio IDE
   
---
-
   - no longer developed
   
---
+---
 
 - Since QGIS 3.16: packages **qgisprocess** &amp; **qgis**
 
---
-
   - use the recent standalone `qgis_process` shell command from QGIS = a unified entry to all providers and algorithms!
-
---
 
   - no more QGIS environment variables needed
   
---
-
   - actively developed
 
 ---
@@ -215,7 +212,7 @@ library(qgisprocess)
 
 
 ```r
-seine_path &lt;- file.path("data/seine.gpkg")
+seine_path &lt;- "data/seine.gpkg"
 ```
 
 
@@ -285,7 +282,7 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/Rtmpw9jNDP/filecbd60073e3a/filecbd4fa156b0.gpkg"
+## [1] "/tmp/RtmpyYt8uj/file660c36d0a63a/file660c14a85bc2.gpkg"
 ## attr(,"class")
 ## [1] "qgis_outputVector"
 ```
@@ -518,7 +515,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ##  $ MAX             : num 547
 ##  $ MEAN            : num 348
 ##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/Rtmpw9jNDP/filecbd60073e3a/filecbd32273872"
+##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpyYt8uj/file660c36d0a63a/file660c1de1cfc4"
 ##  $ RANGE           : num 406
 ##  $ STD_DEV         : num 80.2
 ##  $ SUM             : num 1605135
@@ -559,7 +556,9 @@ qgis_get_output_specs("grass7:r.flow")
 ## 3 flowline         Flow line         outputVector
 ```
 
-So, sometimes you need to select a specific output:
+--
+
+So, sometimes you need to specify the output name:
 
 
 ```r
@@ -643,7 +642,7 @@ seine |&gt;
 ```
 ## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 ## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/Rtmpw9jNDP/filecbd60073e3a/filecbda966872.gpkg"
+##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpyYt8uj/file660c36d0a63a/file660c23779d27.gpkg"
 ```
 
 ---
@@ -850,6 +849,9 @@ class: inverse, center, middle
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
+"navigation": {
+"click": true
+},
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightLanguage": "r",
