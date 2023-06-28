@@ -14,6 +14,8 @@ output:
       - css/custom.css
     chakra: libs/remark-latest.min.js
     nature:
+      navigation: 
+        click: true
       highlightStyle: github
       highlightLines: true
       highlightLanguage: ["r"]
