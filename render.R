@@ -4,7 +4,7 @@ setwd(gitroot)
 dir.create("docs", showWarnings = FALSE)
 xfun::Rscript_call(
     rmarkdown::render,
-    list(input = "qgisprocess_foss4g.Rmd",
+    list(input = "qgisprocess_user_2024.Rmd",
          output_file = "index")
 )
 unlink("docs/index_files", recursive = TRUE)

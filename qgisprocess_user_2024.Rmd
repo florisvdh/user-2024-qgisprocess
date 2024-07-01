@@ -1,9 +1,9 @@
 ---
 title: "Interfacing QGIS processing from R"
 subtitle: ""
-author: "Floris Vanderhaeghe, Dewey Dunnington, Jan Caha, Jannes Münchow, Jakub Nowosad, Robin Lovelace"
+author: "Floris Vanderhaeghe, Dewey Dunnington, Nyall Dawson, Jan Caha, Jannes Muenchow, Jakub Nowosad, Robin Lovelace"
 institute: 
-date: "2023-06-30"
+date: "2024-07-09"
 output:
   xaringan::moon_reader:
     seal: false
@@ -39,13 +39,49 @@ library(units)
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ```
 
-.pull-left[
-<img src="images/flanders.png" width="30%" hspace="40vw"/>
-<img src="images/inbo.jpg" width="50%"/>
-]
+.pull-left[.footnote[.align-items-center[
+<img src="images/useR Salzburg 2024 logo.png" width="20%" hspace="20vw"/>
+<img src="images/flanders.png" width="10%" hspace="20vw"/>
+<img src="images/inbo.jpg" width="15%"/>
+]]]]
 
-.pull-right[.right[Modified FOSS4G 2023 presentation<br/>2024-06-25<br/>[`r fontawesome::fa("github", a11y = "sem")`](https://github.com/florisvdh) [`r fontawesome::fa("mastodon", a11y = "sem")`](https://fosstodon.org/@florisvdh)  [`r fontawesome::fa("orcid", a11y = "sem")`](https://orcid.org/0000-0002-6378-6229)
-]]
+## .pull-right[.footnote[.right[Floris Vanderhaeghe<br/>Dewey Dunnington<br/>Nyall Dawson<br/>Jan Caha<br/>Jannes Muenchow<br/>Jakub Nowosad<br/>Robin Lovelace<br/><br/>[html slides](https://florisvdh.github.io/user-2024-qgisprocess/)<br/>[`r fontawesome::fa("github", a11y = "sem")`](https://github.com/florisvdh) [`r fontawesome::fa("mastodon", a11y = "sem")`](https://fosstodon.org/@florisvdh)  [`r fontawesome::fa("orcid", a11y = "sem")`](https://orcid.org/0000-0002-6378-6229)]]]
+
+---
+class: inverse, middle, center
+
+# About QGIS
+
+---
+layout: false
+
+# QGIS
+
+--
+
+- Popular open-source geographic information system (GIS) program
+
+--
+
+- View geospatial data
+
+--
+
+- Create and edit layers
+
+--
+
+- Do advanced geoprocessing with algorithms of QGIS, GRASS GIS, GDAL ...
+
+--
+
+- Sophisticated maps, atlases and reports
+
+---
+
+```{r echo=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("images/qgis_general.png", error = FALSE)
+```
 
 ---
 class: inverse, middle, center
@@ -53,6 +89,7 @@ class: inverse, middle, center
 # Why interface QGIS processing from R?
 
 ---
+layout: false
 
 # Main advantages
 
@@ -501,7 +538,7 @@ zonal_stats_result$OUTPUT <-
 ---
 layout:false
 
-# Further processing in R
+# Result
 
 ```{r}
 zonal_stats <- sf::st_as_sf(zonal_stats_result) |> 
@@ -509,23 +546,6 @@ zonal_stats <- sf::st_as_sf(zonal_stats_result) |>
   mutate(distance = set_units(distance, "m") |> set_units("km"))
 
 zonal_stats
-```
-
----
-
-```{r include=FALSE}
-plottitle <- "Median, minimum and maximum elevation, 1 km around regularly sampled points"
-```
-
-
-```{r dem-plot, fig.height=6, fig.width=8, fig.align='center', warning=FALSE}
-library(ggplot2)
-ggplot(data = zonal_stats, 
-       aes(x = distance, y = dem_median, ymin = dem_min, ymax = dem_max)) +
-  geom_line() +
-  geom_ribbon(fill = "#93b023", alpha = 0.3) +
-  facet_wrap(~name, scales = "free_x") +
-  labs(y = "elevation [m]", title = plottitle)
 ```
 
 ---
@@ -561,57 +581,37 @@ knitr::include_graphics("https://r-spatial.github.io/qgisprocess/articles/img/qg
 ```
 
 ---
-
-# Future developments
-
-- Include more tutorials
-  - options & environment variables
-  - accepted R object types
-  - copy JSON from QGIS
-  
-- Expand function documentation
-
-- Adapt to `qgis_process` development
-
----
 class: inverse, center, middle
 
-# Contributors
+# Recent developments
 
-<a href="https://github.com/florisvdh" class="" data-hovercard-type="user" data-hovercard-url="/users/florisvdh/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/19164640?s=64&amp;v=4" alt="@florisvdh" size="64" data-view-component="true" class="avatar circle" width="64" height="64" style="background-color:white;">
-      </a>
-      <a href="https://github.com/paleolimbot" class="" data-hovercard-type="user" data-hovercard-url="/users/paleolimbot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/10995762?s=64&amp;v=4" alt="@paleolimbot" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/jannes-m" class="" data-hovercard-type="user" data-hovercard-url="/users/jannes-m/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/9986952?s=64&amp;v=4" alt="@jannes-m" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/JanCaha" class="" data-hovercard-type="user" data-hovercard-url="/users/JanCaha/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/7641902?s=64&amp;v=4" alt="@JanCaha" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/Robinlovelace" class="" data-hovercard-type="user" data-hovercard-url="/users/Robinlovelace/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/1825120?s=64&amp;v=4" alt="@Robinlovelace" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/ambarja" class="" data-hovercard-type="user" data-hovercard-url="/users/ambarja/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/23284899?s=64&amp;v=4" alt="@ambarja" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/Nowosad" class="" data-hovercard-type="user" data-hovercard-url="/users/Nowosad/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/3457131?s=64&amp;v=4" alt="@Nowosad" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/loreabad6" class="" data-hovercard-type="user" data-hovercard-url="/users/loreabad6/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/10034237?s=64&amp;v=4" alt="@loreabad6" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
-      <a href="https://github.com/gavg712" class="" data-hovercard-type="user" data-hovercard-url="/users/gavg712/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-        <img src="https://avatars.githubusercontent.com/u/8514904?s=64&amp;v=4" alt="@gavg712" size="64" data-view-component="true" class="avatar circle" width="64" height="64">
-      </a>
+---
 
+# Recent developments
+
+- Speed-up since QGIS 3.36 & **qgisprocess** 0.4.0
+
+--
+
+- Added vector support for R package **terra**
+
+--
+
+- Vignettes:
+
+  - which R objects are accepted as algorithm arguments?
+  - how to configure behaviour with options or environment variables?
+  - how to pass QGIS expressions?
+  
+--
+
+- Improved handling of deprecated algorithms
 
 ---
 class: inverse, center, middle
 
 # Questions?<br/><br/>Ideas?
 
-### .pull-right-wide[.footnote[.right[Slides: <https://florisvdh.github.io/foss4g-2023-qgisprocess-update-inbo-2024/>]]]
+### .pull-right-wide[.footnote[.right[Slides: <https://florisvdh.github.io/user-2024-qgisprocess/>]]]
 
 

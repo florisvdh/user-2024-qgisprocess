@@ -1,40 +1,40 @@
 h1, h2, h3 {
   font-weight: normal;
-  color: #3a6321;
+  color: #273B8C;
 }
 a, a > code {
-  color: #7f9624;
+  color: #356FB6;
 }
 
 .inverse {
-  background-color: #3a6321;
+  background-color: #273B8C;
 }
 .inverse, .inverse h1, .inverse h2, .inverse h3, .inverse a, inverse a > code {
-  color: #f0e64a;
+  color: #FBF6BA;
 }
 
-.remark-code, .remark-inline-code { font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; color: #6a7b26}
+.remark-code, .remark-inline-code { font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; color: #356FB6}
 
 
 /*-- TABLES --*/
 .remark-slide table {
   margin:              auto;
-  border-top:          1px solid #768692;
-  border-bottom:       1px solid #768692;
+  border-top:          1px solid #273B8C;
+  border-bottom:       1px solid #273B8C;
 }
 
 /*-- Table header --*/
 .remark-slide table thead th {
-  border-bottom:       1px solid #768692;
+  border-bottom:       1px solid #273B8C;
 }
 
 /*-- Table rows (even) --*/
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
-  background:          #f5f9e4;
+  background:          #D7F4F5;
 }
 
 .remark-code-line-highlighted {
-	background-color: #ff80;
+	background-color: #FBF6BA;
 	font-weight: bold;
 }
 
@@ -42,6 +42,9 @@ a, a > code {
   padding-top: 0px;
 }
 
+.pull-right > span:nth-child(1) {
+  right: 0.5em;
+}
 .pull-left-narrow {
   float: left;
   width: 20%;
@@ -57,13 +60,13 @@ a, a > code {
 .footnote {
   position:           absolute;
   bottom:             2em;
-  padding-right:      4em;
+  padding-right:      2em;
   font-size:          70%;
   line-height:        1em;
 }
 
 .hljs-github .hljs-comment, .hljs-github .hljs-quote {
-	color: #566225;
+	color: #356FB6;
 	font-style: italic;
 }
 
