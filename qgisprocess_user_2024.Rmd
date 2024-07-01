@@ -39,11 +39,11 @@ library(units)
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
 ```
 
-.pull-left[.footnote[.align-items-center[
+.pull-left[.footnote[
 <img src="images/useR Salzburg 2024 logo.png" width="20%" hspace="20vw"/>
 <img src="images/flanders.png" width="10%" hspace="20vw"/>
 <img src="images/inbo.jpg" width="15%"/>
-]]]
+]]
 
 ## .pull-right[.footnote[.right[Floris Vanderhaeghe<br/>Dewey Dunnington<br/>Nyall Dawson<br/>Jan Caha<br/>Jannes Muenchow<br/>Jakub Nowosad<br/>Robin Lovelace<br/><br/>[html slides](https://florisvdh.github.io/user-2024-qgisprocess/)<br/>[`r fontawesome::fa("github", a11y = "sem")`](https://github.com/florisvdh) [`r fontawesome::fa("mastodon", a11y = "sem")`](https://fosstodon.org/@florisvdh)  [`r fontawesome::fa("orcid", a11y = "sem")`](https://orcid.org/0000-0002-6378-6229)]]]
 
