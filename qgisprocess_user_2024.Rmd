@@ -194,7 +194,7 @@ layout: true
 library(tmap)
 tm_shape(spData::seine) + 
   tm_lines() + 
-  tm_style("beaver") + 
+  tm_style("albatross_v3") + 
   tm_compass(type = "arrow", position = c("right", "top")) + 
   tm_scale_bar(position = "left", breaks = c(0, 30, 60), text.size = 1) +
   tm_layout(
@@ -242,6 +242,7 @@ result <- qgis_run_algorithm(
  or:
  
 ```{r eval=FALSE}
+remotes::install_github("JanCaha/r_package_qgis") # install pkg first
 result <- qgis::qgis_pointsalonglines(
   INPUT = seine_path,
   DISTANCE = 1e4
@@ -260,7 +261,7 @@ qgis_extract_output(result)
 
 ```{r seine-points-map, echo=FALSE, fig.align='center'}
 tm_shape(spData::seine) + 
-  tm_style("beaver") +
+  tm_style("albatross_v3") +
   tm_lines() + 
   tm_shape(sf::st_as_sf(result)) +
   tm_dots(col = "blue", size = 0.1) +
