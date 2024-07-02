@@ -154,8 +154,18 @@ layout: false
 - **qgisprocess** (Dewey Dunnington et al.): direct interface to `qgis_process`
   - https://r-spatial.github.io/qgisprocess/
   
+
+``` r
+install.packages("qgisprocess")
+```
+  
 - **qgis** (Jan Caha): functions for each algorithm; uses **qgisprocess** package
   - https://jancaha.github.io/r_package_qgis/
+
+
+``` r
+remotes::install_github("jancaha/qgis")
+```
 
 ---
 class: inverse, center, middle
@@ -177,7 +187,6 @@ Load the R package:
 
 
 ``` r
-# install.packages("qgisprocess")
 library(qgisprocess)
 ```
 
@@ -237,7 +246,6 @@ result &lt;- qgis_run_algorithm(
  
 
 ``` r
-# remotes::install_github("jancaha/qgis")
 result &lt;- qgis::qgis_pointsalonglines(
   INPUT = seine_path,
   DISTANCE = 1e4
@@ -254,7 +262,7 @@ qgis_extract_output(result)
 ```
 
 ```
-#&gt; [1] "/tmp/RtmpQkBQdu/file3704236e19f5/file37044d115139.gpkg"
+#&gt; [1] "/tmp/Rtmpcbt1ZB/file499e6eb7711e/file499e7fa4ac8b.gpkg"
 #&gt; attr(,"class")
 #&gt; [1] "qgis_outputVector"
 ```
@@ -496,7 +504,7 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 #&gt;  $ MAX             : num 547
 #&gt;  $ MEAN            : num 348
 #&gt;  $ MIN             : num 141
-#&gt;  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpQkBQdu/file3704236e19f5/file37047a2739f5"
+#&gt;  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/Rtmpcbt1ZB/file499e6eb7711e/file499e3df6b940"
 #&gt;  $ RANGE           : num 406
 #&gt;  $ STD_DEV         : num 80.2
 #&gt;  $ SUM             : num 1605135
@@ -623,7 +631,7 @@ seine |&gt;
 ```
 #&gt; &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
 #&gt; List of 1
-#&gt;  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpQkBQdu/file3704236e19f5/file37045ee43560.gpkg"
+#&gt;  $ OUTPUT: 'qgis_outputVector' chr "/tmp/Rtmpcbt1ZB/file499e6eb7711e/file499e3a42a270.gpkg"
 ```
 
 ---
