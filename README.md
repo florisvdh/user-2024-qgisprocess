@@ -1,3 +1,3 @@
-# FOSS4G 2023 presentation: interfacing QGIS processing from R
+# useR! 2024 presentation: Interfacing QGIS spatial processing algorithms from R
 
-See <https://florisvdh.github.io/foss4g-2023-qgisprocess>.
+See <https://florisvdh.github.io/user-2024-qgisprocess>.
