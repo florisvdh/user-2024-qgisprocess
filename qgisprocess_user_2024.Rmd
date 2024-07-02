@@ -586,6 +586,17 @@ knitr::include_graphics("https://r-spatial.github.io/qgisprocess/articles/img/qg
 ```
 
 ---
+class: center
+
+# Section in book 'Geospatial Computation with R'
+
+```{r echo=FALSE}
+knitr::include_url("https://r.geocompx.org/gis#rqgis", "400px")
+```
+
+.footnote[### <https://r.geocompx.org>]
+
+---
 class: inverse, center, middle
 
 # Recent developments
