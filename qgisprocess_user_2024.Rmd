@@ -1,5 +1,5 @@
 ---
-title: "Interfacing QGIS processing from R"
+title: "Interfacing QGIS spatial processing algorithms from R"
 subtitle: ""
 author: "Floris Vanderhaeghe, Dewey Dunnington, Nyall Dawson, Jan Caha, Jannes Muenchow, Jakub Nowosad, Robin Lovelace"
 institute: 
@@ -33,7 +33,7 @@ library(stringr)
 library(units)
 ```
 
-# .center[Interfacing QGIS processing from R]
+# .center[Interfacing QGIS spatial processing algorithms from R]
 
 ```{r echo=FALSE, out.width='35%', fig.align='center'}
 knitr::include_graphics("images/qgisprocess.svg", error = FALSE)
