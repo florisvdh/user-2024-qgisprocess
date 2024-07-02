@@ -70,3 +70,6 @@ a, a > code {
 	font-style: italic;
 }
 
+.hljs-github .hljs-string, .hljs-github .hljs-doctag {
+	color: #008080;
+}
