@@ -233,7 +233,7 @@ seine_path <- "data/seine.gpkg"
 
 Run algorithm:
 
-```{r}
+```{r collapse=TRUE}
 result <- qgis_run_algorithm(
   algorithm = "native:pointsalonglines",
   INPUT = seine_path,
