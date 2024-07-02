@@ -178,8 +178,16 @@ layout: false
 - **qgisprocess** (Dewey Dunnington et al.): direct interface to `qgis_process`
   - https://r-spatial.github.io/qgisprocess/
   
+```{r eval=FALSE}
+install.packages("qgisprocess")
+```
+  
 - **qgis** (Jan Caha): functions for each algorithm; uses **qgisprocess** package
   - https://jancaha.github.io/r_package_qgis/
+
+```{r eval=FALSE}
+remotes::install_github("jancaha/qgis")
+```
 
 ---
 class: inverse, center, middle
@@ -214,7 +222,6 @@ sf::write_sf(spData::seine, seine_path)
 Load the R package:
 
 ```{r}
-# install.packages("qgisprocess")
 library(qgisprocess)
 ```
 
@@ -246,7 +253,6 @@ result <- qgis_run_algorithm(
  or:
  
 ```{r eval=FALSE}
-# remotes::install_github("jancaha/qgis")
 result <- qgis::qgis_pointsalonglines(
   INPUT = seine_path,
   DISTANCE = 1e4
