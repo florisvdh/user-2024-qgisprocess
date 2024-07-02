@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Interfacing QGIS processing from R</title>
+    <title>Interfacing QGIS spatial processing algorithms from R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Floris Vanderhaeghe, Dewey Dunnington, Nyall Dawson, Jan Caha, Jannes Muenchow, Jakub Nowosad, Robin Lovelace" />
     <meta name="date" content="2024-07-09" />
@@ -16,7 +16,7 @@
 
 
 
-# .center[Interfacing QGIS processing from R]
+# .center[Interfacing QGIS spatial processing algorithms from R]
 
 &lt;img src="images/qgisprocess.svg" width="35%" style="display: block; margin: auto;" /&gt;
 
@@ -177,14 +177,15 @@ Load the R package:
 
 
 ``` r
+# install.packages("qgisprocess")
 library(qgisprocess)
 ```
 
 ```
-## Attempting to load the package cache ... Success!
-## QGIS version: 3.38.0-Grenoble
-## Having access to 2059 algorithms from 18 QGIS processing providers.
-## Run `qgis_configure(use_cached_data = TRUE)` to reload cache and get more details.
+#&gt; Attempting to load the package cache ... Success!
+#&gt; QGIS version: 3.38.0-Grenoble
+#&gt; Having access to 2059 algorithms from 18 QGIS processing providers.
+#&gt; Run `qgis_configure(use_cached_data = TRUE)` to reload cache and get more details.
 ```
 
 ---
@@ -200,17 +201,17 @@ seine_path &lt;- "data/seine.gpkg"
 ```
 
 ```
-## Simple feature collection with 3 features and 1 field
-## Geometry type: MULTILINESTRING
-## Dimension:     XY
-## Bounding box:  xmin: 518344.7 ymin: 6660431 xmax: 879955.3 ymax: 6938864
-## Projected CRS: RGF93 v1 / Lambert-93
-## # A tibble: 3 × 2
-##   name                                                                      geom
-##   &lt;chr&gt;                                                    &lt;MULTILINESTRING [m]&gt;
-## 1 Marne ((879955.3 6755725, 878440.9 6755688, 876653.8 6756227, 874212.2 675791…
-## 2 Seine ((828893.6 6713873, 828216.3 6715450, 827937.9 6716999, 828199.2 671851…
-## 3 Yonne ((773482.1 6660431, 771342.9 6665712, 771043 6667566, 770931.7 6669151,…
+#&gt; Simple feature collection with 3 features and 1 field
+#&gt; Geometry type: MULTILINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 518344.7 ymin: 6660431 xmax: 879955.3 ymax: 6938864
+#&gt; Projected CRS: RGF93 v1 / Lambert-93
+#&gt; # A tibble: 3 × 2
+#&gt;   name                                                                      geom
+#&gt;   &lt;chr&gt;                                                    &lt;MULTILINESTRING [m]&gt;
+#&gt; 1 Marne ((879955.3 6755725, 878440.9 6755688, 876653.8 6756227, 874212.2 675791…
+#&gt; 2 Seine ((828893.6 6713873, 828216.3 6715450, 827937.9 6716999, 828199.2 671851…
+#&gt; 3 Yonne ((773482.1 6660431, 771342.9 6665712, 771043 6667566, 770931.7 6669151,…
 ```
 
 
@@ -225,18 +226,9 @@ result &lt;- qgis_run_algorithm(
   INPUT = seine_path,
   DISTANCE = 1e4
 )
-```
-
-```
-## Argument `START_OFFSET` is unspecified (using QGIS default value).
-```
-
-```
-## Argument `END_OFFSET` is unspecified (using QGIS default value).
-```
-
-```
-## Using `OUTPUT = qgis_tmp_vector()`
+#&gt; Argument `START_OFFSET` is unspecified (using QGIS default value).
+#&gt; Argument `END_OFFSET` is unspecified (using QGIS default value).
+#&gt; Using `OUTPUT = qgis_tmp_vector()`
 ```
 
 --
@@ -245,6 +237,7 @@ result &lt;- qgis_run_algorithm(
  
 
 ``` r
+# remotes::install_github("jancaha/qgis")
 result &lt;- qgis::qgis_pointsalonglines(
   INPUT = seine_path,
   DISTANCE = 1e4
@@ -261,9 +254,9 @@ qgis_extract_output(result)
 ```
 
 ```
-## [1] "/tmp/RtmpuiJ58q/file32cf15f29bd6/file32cf453ecfda.gpkg"
-## attr(,"class")
-## [1] "qgis_outputVector"
+#&gt; [1] "/tmp/RtmpQkBQdu/file3704236e19f5/file37044d115139.gpkg"
+#&gt; attr(,"class")
+#&gt; [1] "qgis_outputVector"
 ```
 
 ---
@@ -353,27 +346,27 @@ qgis_providers()
 ```
 
 ```
-## # A tibble: 18 × 3
-##    provider         provider_title                         algorithm_count
-##    &lt;chr&gt;            &lt;chr&gt;                                            &lt;int&gt;
-##  1 cartographytools Cartography tools                                    5
-##  2 gdal             GDAL                                                56
-##  3 grass            GRASS                                              307
-##  4 latlontools      Lat Lon tools                                       10
-##  5 model            Models                                               3
-##  6 NetworkGT        NetworkGT                                           33
-##  7 Networks         Networks                                            48
-##  8 pcraster         PCRaster                                           102
-##  9 qgis             QGIS                                                42
-## 10 3d               QGIS (3D)                                            1
-## 11 native           QGIS (native c++)                                  263
-## 12 pdal             QGIS (PDAL)                                         17
-## 13 qneat3           QNEAT3 - Qgis Network Analysis Toolbox              14
-## 14 sagang           SAGA Next Gen                                      587
-## 15 script           Scripts                                              1
-## 16 Valhalla         Valhalla                                            20
-## 17 visibility       Visibility analysis                                  4
-## 18 wbt              WhiteboxTools                                      546
+#&gt; # A tibble: 18 × 3
+#&gt;    provider         provider_title                         algorithm_count
+#&gt;    &lt;chr&gt;            &lt;chr&gt;                                            &lt;int&gt;
+#&gt;  1 cartographytools Cartography tools                                    5
+#&gt;  2 gdal             GDAL                                                56
+#&gt;  3 grass            GRASS                                              307
+#&gt;  4 latlontools      Lat Lon tools                                       10
+#&gt;  5 model            Models                                               3
+#&gt;  6 NetworkGT        NetworkGT                                           33
+#&gt;  7 Networks         Networks                                            48
+#&gt;  8 pcraster         PCRaster                                           102
+#&gt;  9 qgis             QGIS                                                42
+#&gt; 10 3d               QGIS (3D)                                            1
+#&gt; 11 native           QGIS (native c++)                                  263
+#&gt; 12 pdal             QGIS (PDAL)                                         17
+#&gt; 13 qneat3           QNEAT3 - Qgis Network Analysis Toolbox              14
+#&gt; 14 sagang           SAGA Next Gen                                      587
+#&gt; 15 script           Scripts                                              1
+#&gt; 16 Valhalla         Valhalla                                            20
+#&gt; 17 visibility       Visibility analysis                                  4
+#&gt; 18 wbt              WhiteboxTools                                      546
 ```
 
 ---
@@ -384,21 +377,21 @@ qgis_plugins()
 ```
 
 ```
-## # A tibble: 12 × 2
-##    name                    enabled
-##    &lt;chr&gt;                   &lt;lgl&gt;  
-##  1 QNEAT3                  TRUE   
-##  2 ViewshedAnalysis        TRUE   
-##  3 cartography_tools       TRUE   
-##  4 grassprovider           TRUE   
-##  5 latlontools             TRUE   
-##  6 network_gt              TRUE   
-##  7 networks                TRUE   
-##  8 pcraster_tools          TRUE   
-##  9 processing              TRUE   
-## 10 processing_saga_nextgen TRUE   
-## 11 valhalla                TRUE   
-## 12 wbt_for_qgis            TRUE
+#&gt; # A tibble: 12 × 2
+#&gt;    name                    enabled
+#&gt;    &lt;chr&gt;                   &lt;lgl&gt;  
+#&gt;  1 QNEAT3                  TRUE   
+#&gt;  2 ViewshedAnalysis        TRUE   
+#&gt;  3 cartography_tools       TRUE   
+#&gt;  4 grassprovider           TRUE   
+#&gt;  5 latlontools             TRUE   
+#&gt;  6 network_gt              TRUE   
+#&gt;  7 networks                TRUE   
+#&gt;  8 pcraster_tools          TRUE   
+#&gt;  9 processing              TRUE   
+#&gt; 10 processing_saga_nextgen TRUE   
+#&gt; 11 valhalla                TRUE   
+#&gt; 12 wbt_for_qgis            TRUE
 ```
 
 ---
@@ -484,9 +477,9 @@ class(elev)
 ```
 
 ```
-## [1] "SpatRaster"
-## attr(,"package")
-## [1] "terra"
+#&gt; [1] "SpatRaster"
+#&gt; attr(,"package")
+#&gt; [1] "terra"
 ```
 
 --
@@ -497,17 +490,17 @@ qgis_run_algorithm("native:rasterlayerstatistics", INPUT = elev, BAND = 1)
 ```
 
 ```
-## &lt;Result of `qgis_run_algorithm("native:rasterlayerstatistics", ...)`&gt;
-## List of 9
-##  $ COUNT           : num 4608
-##  $ MAX             : num 547
-##  $ MEAN            : num 348
-##  $ MIN             : num 141
-##  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpuiJ58q/file32cf15f29bd6/file32cf717836e2"
-##  $ RANGE           : num 406
-##  $ STD_DEV         : num 80.2
-##  $ SUM             : num 1605135
-##  $ SUM_OF_SQUARES  : num 29646349
+#&gt; &lt;Result of `qgis_run_algorithm("native:rasterlayerstatistics", ...)`&gt;
+#&gt; List of 9
+#&gt;  $ COUNT           : num 4608
+#&gt;  $ MAX             : num 547
+#&gt;  $ MEAN            : num 348
+#&gt;  $ MIN             : num 141
+#&gt;  $ OUTPUT_HTML_FILE: 'qgis_outputHtml' chr "/tmp/RtmpQkBQdu/file3704236e19f5/file37047a2739f5"
+#&gt;  $ RANGE           : num 406
+#&gt;  $ STD_DEV         : num 80.2
+#&gt;  $ SUM             : num 1605135
+#&gt;  $ SUM_OF_SQUARES  : num 29646349
 ```
 
 
@@ -536,12 +529,12 @@ qgis_get_output_specs("grass:r.flow")
 ```
 
 ```
-## # A tibble: 3 × 3
-##   name             description       qgis_output_type
-##   &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;           
-## 1 flowaccumulation Flow accumulation outputRaster    
-## 2 flowlength       Flow path length  outputRaster    
-## 3 flowline         Flow line         outputVector
+#&gt; # A tibble: 3 × 3
+#&gt;   name             description       qgis_output_type
+#&gt;   &lt;chr&gt;            &lt;chr&gt;             &lt;chr&gt;           
+#&gt; 1 flowaccumulation Flow accumulation outputRaster    
+#&gt; 2 flowlength       Flow path length  outputRaster    
+#&gt; 3 flowline         Flow line         outputVector
 ```
 
 --
@@ -610,9 +603,9 @@ seine_points_buffer
 ```
 
 ```
-## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
-## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "data/buffer.gpkg"
+#&gt; &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
+#&gt; List of 1
+#&gt;  $ OUTPUT: 'qgis_outputVector' chr "data/buffer.gpkg"
 ```
 
 --
@@ -628,9 +621,9 @@ seine |&gt;
 ```
 
 ```
-## &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
-## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpuiJ58q/file32cf15f29bd6/file32cf5c8357e1.gpkg"
+#&gt; &lt;Result of `qgis_run_algorithm("native:buffer", ...)`&gt;
+#&gt; List of 1
+#&gt;  $ OUTPUT: 'qgis_outputVector' chr "/tmp/RtmpQkBQdu/file3704236e19f5/file37045ee43560.gpkg"
 ```
 
 ---
@@ -652,26 +645,26 @@ jsonlite::prettify(json_from_qgis)
 ```
 
 ```
-## {
-##     "area_units": "m2",
-##     "distance_units": "meters",
-##     "ellipsoid": "EPSG:7030",
-##     "inputs": {
-##         "COLUMN_PREFIX": "dem_",
-##         "INPUT": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/buffer.gpkg|layername=buffer",
-##         "INPUT_RASTER": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/dem_clip.tif",
-##         "OUTPUT": "ogr:dbname='/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg' table=\"seine_zonal\" (geom)",
-##         "RASTER_BAND": 1,
-##         "STATISTICS": [
-##             2,
-##             3,
-##             4,
-##             5,
-##             6
-##         ]
-##     }
-## }
-## 
+#&gt; {
+#&gt;     "area_units": "m2",
+#&gt;     "distance_units": "meters",
+#&gt;     "ellipsoid": "EPSG:7030",
+#&gt;     "inputs": {
+#&gt;         "COLUMN_PREFIX": "dem_",
+#&gt;         "INPUT": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/buffer.gpkg|layername=buffer",
+#&gt;         "INPUT_RASTER": "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/dem_clip.tif",
+#&gt;         "OUTPUT": "ogr:dbname='/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg' table=\"seine_zonal\" (geom)",
+#&gt;         "RASTER_BAND": 1,
+#&gt;         "STATISTICS": [
+#&gt;             2,
+#&gt;             3,
+#&gt;             4,
+#&gt;             5,
+#&gt;             6
+#&gt;         ]
+#&gt;     }
+#&gt; }
+#&gt; 
 ```
 
 ---
@@ -695,9 +688,9 @@ zonal_stats_result
 ```
 
 ```
-## &lt;Result of `qgis_run_algorithm("native:zonalstatisticsfb", ...)`&gt;
-## List of 1
-##  $ OUTPUT: 'qgis_outputVector' chr "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg|layername=seine_zonal"
+#&gt; &lt;Result of `qgis_run_algorithm("native:zonalstatisticsfb", ...)`&gt;
+#&gt; List of 1
+#&gt;  $ OUTPUT: 'qgis_outputVector' chr "/home/floris/git_repositories/foss4g-2023-qgisprocess/data/zonal_stats.gpkg|layername=seine_zonal"
 ```
 
 
@@ -718,20 +711,20 @@ zonal_stats
 ```
 
 ```
-## # A tibble: 123 × 8
-##    name  distance  angle dem_mean dem_median dem_stdev dem_min dem_max
-##    &lt;chr&gt;     [km]  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1 Marne        0 269.       372.       366.      22.0    344.    412.
-##  2 Marne       10 322.       340.       338       21.9    309.    416.
-##  3 Marne       20 327.       331.       334.      23.9    287.    382.
-##  4 Marne       30 332.       296.       280.      29.5    264.    359.
-##  5 Marne       40   5.76     286.       295.      24.3    238.    317.
-##  6 Marne       50 358.       269.       254.      45.4    221.    378.
-##  7 Marne       60  22.4      235.       220.      32.7    201.    312.
-##  8 Marne       70 350.       202.       188.      24.8    183.    306.
-##  9 Marne       80 335.       196.       184.      26.9    167.    276 
-## 10 Marne       90 334.       182.       184.      19.6    150.    209.
-## # ℹ 113 more rows
+#&gt; # A tibble: 123 × 8
+#&gt;    name  distance  angle dem_mean dem_median dem_stdev dem_min dem_max
+#&gt;    &lt;chr&gt;     [km]  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+#&gt;  1 Marne        0 269.       372.       366.      22.0    344.    412.
+#&gt;  2 Marne       10 322.       340.       338       21.9    309.    416.
+#&gt;  3 Marne       20 327.       331.       334.      23.9    287.    382.
+#&gt;  4 Marne       30 332.       296.       280.      29.5    264.    359.
+#&gt;  5 Marne       40   5.76     286.       295.      24.3    238.    317.
+#&gt;  6 Marne       50 358.       269.       254.      45.4    221.    378.
+#&gt;  7 Marne       60  22.4      235.       220.      32.7    201.    312.
+#&gt;  8 Marne       70 350.       202.       188.      24.8    183.    306.
+#&gt;  9 Marne       80 335.       196.       184.      26.9    167.    276 
+#&gt; 10 Marne       90 334.       182.       184.      19.6    150.    209.
+#&gt; # ℹ 113 more rows
 ```
 
 ---
@@ -759,6 +752,15 @@ class: center
 # Cheat sheet !
 
 &lt;img src="https://r-spatial.github.io/qgisprocess/articles/img/qgisprocess_en.png" width="65%" /&gt;
+
+---
+class: center
+
+# Section in book 'Geospatial Computation with R'
+
+&lt;iframe src="https://r.geocompx.org/gis#rqgis" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
+
+.footnote[### &lt;https://r.geocompx.org&gt;]
 
 ---
 class: inverse, center, middle
