@@ -112,7 +112,7 @@ layout: false
 
 --
 
-- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers (1000+ geospatial algorithms from QGIS and plugins)
+- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers (1000+ geospatial algorithms)
 
 <br/>
 
