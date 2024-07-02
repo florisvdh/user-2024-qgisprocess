@@ -111,7 +111,7 @@ layout: false
 
 --
 
-- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers (1000+ geospatial algorithms)
+- Unified interface to QGIS, GRASS GIS, SAGA, GDAL and other processing providers (1000+ geospatial algorithms from QGIS and plugins)
 
 <br/>
 
@@ -230,6 +230,7 @@ seine_path <- "data/seine.gpkg"
 Run algorithm:
 
 ```{r}
+# remotes::install_github("r-spatial/qgisprocess")
 result <- qgis_run_algorithm(
   algorithm = "native:pointsalonglines",
   INPUT = seine_path,
@@ -242,6 +243,7 @@ result <- qgis_run_algorithm(
  or:
  
 ```{r eval=FALSE}
+# remotes::install_github("jancaha/qgis")
 result <- qgis::qgis_pointsalonglines(
   INPUT = seine_path,
   DISTANCE = 1e4
