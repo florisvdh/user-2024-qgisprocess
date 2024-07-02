@@ -26,9 +26,11 @@ output:
 ```{r setup, include=FALSE}
 options(
   htmltools.dir.version = FALSE,
-  knitr.table.format = "html",
-  comment = "#>"
+  knitr.table.format = "html"
   )
+knitr::opts_chunk$set(
+  comment = "#>"
+)
 library(dplyr)
 library(stringr)
 library(units)
