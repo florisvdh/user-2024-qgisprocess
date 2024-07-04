@@ -62,23 +62,23 @@ layout: false
 
 --
 
-- Popular open-source geographic information system (GIS) program
+Popular open-source geographic information system (GIS) program to:
 
 --
 
-- View geospatial data interactively
+- view geospatial data interactively
 
 --
 
-- Create and edit spatial data layers
+- create and edit spatial data layers
 
 --
 
-- Perform advanced geoprocessing with algorithms of QGIS, GRASS GIS, GDAL ...
+- perform advanced geoprocessing with algorithms of QGIS, GRASS GIS, GDAL ...
 
 --
 
-- Make sophisticated maps, atlases and reports
+- make sophisticated maps, atlases and reports
 
 ---
 
