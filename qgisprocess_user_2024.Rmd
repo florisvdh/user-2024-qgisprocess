@@ -499,7 +499,7 @@ layout:true
 
 ---
 
-```{r echo=FALSE, out.width='100%', fig.align='center'}
+```{r echo=FALSE, out.width='80%', fig.align='center'}
 knitr::include_graphics("images/qgis_copy_json.png", error = FALSE)
 ```
 
